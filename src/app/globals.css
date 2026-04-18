@@ -1,26 +1,232 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ===== Declaração de Variáveis de Cor (Tailwind v4 Setup) ===== */
+@theme {
+  --color-fundo-principal: var(--fundo-principal);
+  --color-fundo-secundario: var(--fundo-secundario);
+  --color-fundo-cartao: var(--fundo-cartao);
+  --color-fundo-cartao-hover: var(--fundo-cartao-hover);
+  
+  --color-texto-principal: var(--texto-principal);
+  --color-texto-secundario: var(--texto-secundario);
+  --color-texto-auxiliar: var(--texto-auxiliar);
+  
+  --color-destaque: var(--destaque);
+  --color-destaque-fraco: var(--destaque-fraco);
+  
+  --color-borda: var(--borda);
+  --color-borda-hover: var(--borda-hover);
+
+  /* Fontes Extras */
+  --font-inter: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ===== Temas Globais ===== */
+
+/* Tema Escuro (Padrão) */
+:root, :root[data-tema="escuro"] {
+  --fundo-principal: #0a0a0f;
+  --fundo-secundario: #12121a;
+  --fundo-cartao: rgba(20, 20, 30, 0.85);
+  --fundo-cartao-hover: rgba(25, 25, 40, 0.95);
+  
+  --texto-principal: #eaeaea;
+  --texto-secundario: #a0a0b0;
+  --texto-auxiliar: #6a6a7a;
+  
+  --destaque: #00d9ff;
+  --destaque-fraco: rgba(0, 217, 255, 0.15);
+  
+  --borda: rgba(255, 255, 255, 0.06);
+  --borda-hover: rgba(255, 255, 255, 0.12);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Tema Claro (Branco) */
+:root[data-tema="claro"] {
+  --fundo-principal: #f9fafb;
+  --fundo-secundario: #e5e7eb;
+  --fundo-cartao: #ffffff;
+  --fundo-cartao-hover: #f3f4f6;
+  
+  --texto-principal: #111827;
+  --texto-secundario: #4b5563;
+  --texto-auxiliar: #9ca3af;
+  
+  --destaque: #0ea5e9; /* Light blue accent */
+  --destaque-fraco: rgba(14, 165, 233, 0.15);
+  
+  --borda: #d1d5db;
+  --borda-hover: #9ca3af;
+}
+
+/* Tema Alto Contraste */
+:root[data-tema="alto-contraste"] {
+  --fundo-principal: #000000;
+  --fundo-secundario: #000000;
+  --fundo-cartao: #000000;
+  --fundo-cartao-hover: #1a1a1a;
+  
+  --texto-principal: #ffff00; /* Yellow for high readability */
+  --texto-secundario: #ffffff;
+  --texto-auxiliar: #cccccc;
+  
+  --destaque: #00ff00; /* Bright green */
+  --destaque-fraco: rgba(0, 255, 0, 0.2);
+  
+  --borda: #ffffff;
+  --borda-hover: #ffff00;
+}
+
+/* Base globais para Body/Scrollbar */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--fundo-principal);
+  color: var(--texto-principal);
+  font-family: var(--font-inter);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--fundo-principal);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--borda);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--destaque);
+}
+
+/* =========================================
+   Componentes Específicos & Sobrescritas
+   ========================================= */
+
+/* ==== Leaflet Map ==== */
+
+.campus-map-wrapper {
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.campus-map-container {
+  background: var(--fundo-secundario) !important;
+}
+
+/* Marcadores Leaflet */
+.campus-marker-wrapper {
+  background: none !important;
+  border: none !important;
+}
+
+.campus-marker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.campus-marker-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--marker-color, var(--destaque));
+  border: 2px solid var(--fundo-principal);
+  box-shadow: 0 0 12px var(--marker-color, var(--destaque)),
+              0 0 24px color-mix(in srgb, var(--marker-color, var(--destaque)) 40%, transparent);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.2s ease;
+}
+
+.campus-marker:hover .campus-marker-dot {
+  transform: scale(1.3);
+}
+
+.campus-marker-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--marker-color, var(--destaque));
+  opacity: 0.3;
+  animation: pulse 2s ease-in-out infinite;
+  z-index: 1;
+}
+
+.campus-marker-label {
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--texto-principal);
+  text-shadow: 0px 1px 4px var(--fundo-principal), 0 0 8px var(--fundo-secundario);
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* Leaflet Popups */
+.campus-popup .leaflet-popup-content-wrapper {
+  background: var(--fundo-cartao) !important;
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--borda);
+  border-radius: 12px !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5) !important;
+  color: var(--texto-principal) !important;
+  padding: 0 !important;
+}
+
+.campus-popup .leaflet-popup-content {
+  margin: 0 !important;
+  min-width: 220px;
+}
+
+.campus-popup .leaflet-popup-tip {
+  background: var(--fundo-cartao) !important;
+  border: 1px solid var(--borda);
+}
+
+.leaflet-control-zoom {
+  border: 1px solid var(--borda) !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+}
+
+.leaflet-control-zoom a {
+  background: var(--fundo-cartao) !important;
+  color: var(--texto-principal) !important;
+  border-bottom: 1px solid var(--borda) !important;
+  width: 34px !important;
+  height: 34px !important;
+  line-height: 34px !important;
+  font-size: 16px !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--fundo-cartao-hover) !important;
+  color: var(--destaque) !important;
 }
