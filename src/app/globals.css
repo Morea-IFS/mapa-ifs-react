@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* ===== Declaração de Variáveis de Cor (Tailwind v4 Setup) ===== */
 @theme {
   --color-fundo-principal: var(--fundo-principal);
   --color-fundo-secundario: var(--fundo-secundario);
@@ -17,13 +16,9 @@
   --color-borda: var(--borda);
   --color-borda-hover: var(--borda-hover);
 
-  /* Fontes Extras */
   --font-inter: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
-/* ===== Temas Globais ===== */
-
-/* Tema Escuro (Padrão) */
 :root, :root[data-tema="escuro"] {
   --fundo-principal: #0a0a0f;
   --fundo-secundario: #12121a;
@@ -41,7 +36,6 @@
   --borda-hover: rgba(255, 255, 255, 0.12);
 }
 
-/* Tema Claro (Branco) */
 :root[data-tema="claro"] {
   --fundo-principal: #f9fafb;
   --fundo-secundario: #e5e7eb;
@@ -52,25 +46,24 @@
   --texto-secundario: #4b5563;
   --texto-auxiliar: #9ca3af;
   
-  --destaque: #0ea5e9; /* Light blue accent */
+  --destaque: #0ea5e9;
   --destaque-fraco: rgba(14, 165, 233, 0.15);
   
   --borda: #d1d5db;
   --borda-hover: #9ca3af;
 }
 
-/* Tema Alto Contraste */
 :root[data-tema="alto-contraste"] {
   --fundo-principal: #000000;
   --fundo-secundario: #000000;
   --fundo-cartao: #000000;
   --fundo-cartao-hover: #1a1a1a;
   
-  --texto-principal: #ffff00; /* Yellow for high readability */
+  --texto-principal: #ffff00;
   --texto-secundario: #ffffff;
   --texto-auxiliar: #cccccc;
   
-  --destaque: #00ff00; /* Bright green */
+  --destaque: #00ff00;
   --destaque-fraco: rgba(0, 255, 0, 0.2);
   
   --borda: #ffffff;

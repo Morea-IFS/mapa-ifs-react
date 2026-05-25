@@ -21,22 +21,22 @@ export default function SideBar() {
       {/* Overlay Escurecido para Mobile */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[999] animate-in fade-in duration-300 md:hidden" 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-3000 animate-in fade-in duration-300 md:hidden" 
           onClick={closeSidebar} 
         />
       )}
 
       {/* Botão Hambúrguer Mobile */}
       <button
-        className={`fixed top-4 left-4 z-[1100] w-11 h-11 flex flex-col justify-center items-center gap-[5px] bg-fundo-secundario/80 backdrop-blur-md border border-borda rounded-md cursor-pointer transition-all duration-250 hover:bg-fundo-cartao hover:border-destaque hover:shadow-[0_0_15px_var(--color-destaque-fraco)] md:hidden ${isOpen ? 'group is-active' : ''}`}
+        className={`fixed top-4 left-4 z-5000 w-12 h-12 flex flex-col justify-center items-center gap-1.25 bg-fundo-secundario/80 backdrop-blur-md border border-borda rounded-md cursor-pointer transition-all duration-300 hover:bg-fundo-cartao hover:border-destaque hover:shadow-[0_0_15px_var(--color-destaque-fraco)] md:hidden`}
         onClick={toggleSidebar}
         aria-label={isOpen ? "Fechar Menu" : "Abrir Menu Principal"}
         aria-expanded={isOpen}
         aria-controls="menu-lateral"
       >
-        <span className={`block w-5 h-[2px] bg-texto-principal rounded-[2px] transition-all duration-250 ${isOpen ? 'rotate-45 translate-y-[7px]' : ''}`} aria-hidden="true" />
-        <span className={`block w-5 h-[2px] bg-texto-principal rounded-[2px] transition-all duration-250 ${isOpen ? 'opacity-0' : ''}`} aria-hidden="true" />
-        <span className={`block w-5 h-[2px] bg-texto-principal rounded-[2px] transition-all duration-250 ${isOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} aria-hidden="true" />
+        <span className={`block w-5 h-0.5 bg-texto-principal rounded-xs transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-1.75' : ''}`} aria-hidden="true" />
+        <span className={`block w-5 h-0.5 bg-texto-principal rounded-xs transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`} aria-hidden="true" />
+        <span className={`block w-5 h-0.5 bg-texto-principal rounded-xs transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-1.75' : ''}`} aria-hidden="true" />
       </button>
 
       {/* Painel da SideBar */}
@@ -44,15 +44,16 @@ export default function SideBar() {
         id="menu-lateral"
         role="navigation"
         aria-label="Navegação Principal do Campus"
-        className={`fixed top-0 left-0 w-[260px] h-screen bg-fundo-secundario/95 backdrop-blur-xl border-r border-borda z-[1000] flex flex-col overflow-hidden transition-transform duration-400 ease-in-out md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`fixed top-0 left-0 w-65 max-w-[85vw] h-dvh bg-fundo-secundario/95 backdrop-blur-xl border-r border-borda z-4000 flex flex-col overflow-hidden transition-transform duration-300 ease-in-out md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        style={{ visibility: isOpen ? 'visible' : 'hidden' }}
         aria-hidden={!isOpen}
       >
         {/* Cabeçalho */}
-        <div className="px-5 pt-6 pb-4 border-b border-borda">
+        <div className="pl-16 md:pl-5 pr-5 pt-6 pb-4 border-b border-borda min-h-19 flex items-center">
           <div className="flex items-center gap-2.5">
             <span className="text-2xl" aria-hidden="true"><Map className="text-destaque" /></span>
-            <span className="text-lg font-bold bg-gradient-to-br from-destaque to-indigo-500 bg-clip-text text-transparent tracking-tight">
-              Mapa IFS
+            <span className="text-lg font-bold bg-linear-to-br from-destaque to-indigo-500 bg-clip-text text-transparent tracking-tight">
+              If Map
             </span>
           </div>
         </div>
@@ -69,7 +70,7 @@ export default function SideBar() {
             }`}
             aria-current={isActive('/') ? 'page' : undefined}
           >
-            {isActive('/') && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-destaque rounded-r-sm" aria-hidden="true" />}
+            {isActive('/') && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.75 h-5 bg-destaque rounded-r-sm" aria-hidden="true" />}
             <span className="w-5 flex justify-center" aria-hidden="true"><MapPin size={18} /></span>
             <span>Mapa Geral</span>
           </Link>
@@ -90,7 +91,7 @@ export default function SideBar() {
               }`}
               aria-current={isActive(`/bloco/${bloco.id}`) ? 'page' : undefined}
             >
-              {isActive(`/bloco/${bloco.id}`) && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-destaque rounded-r-sm" />}
+              {isActive(`/bloco/${bloco.id}`) && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.75 h-5 bg-destaque rounded-r-sm" />}
               <span
                 className="w-2 h-2 rounded-full shrink-0 ml-1.5 shadow-[0_0_6px_currentColor]"
                 style={{ backgroundColor: bloco.color || 'var(--color-destaque)' }}
