@@ -28,7 +28,7 @@ export default function SideBar() {
 
       {/* Botão Hambúrguer Mobile */}
       <button
-        className={`fixed top-4 left-4 z-5000 w-12 h-12 flex flex-col justify-center items-center gap-1.25 bg-fundo-secundario/80 backdrop-blur-md border border-borda rounded-md cursor-pointer transition-all duration-300 hover:bg-fundo-cartao hover:border-destaque hover:shadow-[0_0_15px_var(--color-destaque-fraco)] md:hidden`}
+        className={`fixed top-4 left-4 z-5000 w-11 h-11 flex flex-col justify-center items-center gap-1.25 bg-fundo-secundario/80 backdrop-blur-md border border-borda rounded-md cursor-pointer transition-all duration-300 hover:bg-fundo-cartao hover:border-destaque hover:shadow-[0_0_15px_var(--color-destaque-fraco)] md:hidden ${isOpen ? 'group is-active' : ''}`}
         onClick={toggleSidebar}
         aria-label={isOpen ? "Fechar Menu" : "Abrir Menu Principal"}
         aria-expanded={isOpen}
@@ -45,7 +45,6 @@ export default function SideBar() {
         role="navigation"
         aria-label="Navegação Principal do Campus"
         className={`fixed top-0 left-0 w-65 max-w-[85vw] h-dvh bg-fundo-secundario/95 backdrop-blur-xl border-r border-borda z-4000 flex flex-col overflow-hidden transition-transform duration-300 ease-in-out md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
-        style={{ visibility: isOpen ? 'visible' : 'hidden' }}
         aria-hidden={!isOpen}
       >
         {/* Cabeçalho */}
