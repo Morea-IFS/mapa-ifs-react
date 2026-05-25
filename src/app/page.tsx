@@ -5,11 +5,10 @@ import { blocos } from '@/data/blocos';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-// Import dynamic to avoid SSR issues with Leaflet
 const CampusMap = dynamic(() => import('@/components/CampusMap'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-[500px] md:h-[600px] rounded-2xl overflow-hidden border border-borda shadow-lg relative flex items-center justify-center bg-fundo-secundario text-texto-auxiliar">
+    <div className="w-full h-125 md:h-150 rounded-2xl overflow-hidden border border-borda shadow-lg relative flex items-center justify-center bg-fundo-secundario text-texto-auxiliar">
       Carregando mapa interativo...
     </div>
   )
@@ -17,13 +16,13 @@ const CampusMap = dynamic(() => import('@/components/CampusMap'), {
 
 export default function MapaGeralPage() {
   return (
-    <div className="min-h-screen p-4 md:p-8 max-w-[1200px] mx-auto animate-in fade-in duration-500">
+    <div className="min-h-screen p-4 md:p-8 max-w-300 mx-auto animate-in fade-in duration-500">
       <div className="text-center py-10 pb-6">
-        <h1 className="text-2xl md:text-4xl font-bold tracking-tight bg-gradient-to-br from-destaque via-indigo-500 to-purple-500 bg-clip-text text-transparent mb-2">
-          Mapa do Campus
+        <h1 className="text-3xl md:text-7xl font-bold tracking-tight bg-linear-to-br from-destaque via-indigo-500 to-purple-500 bg-clip-text text-transparent mb-2">
+          If Map
         </h1>
         <p className="text-[0.95rem] text-texto-secundario">
-          Clique nos marcadores para explorar os blocos do IFS
+          Um mapa do campus para facilitar sua navegação e localização de salas, blocos e outros pontos de interesse.
         </p>
       </div>
 
@@ -40,7 +39,7 @@ export default function MapaGeralPage() {
             <div key={bloco.id} className="animate-in fade-in duration-500 fill-mode-both">
               <Link
                 href={`/bloco/${bloco.id}`}
-                className="group flex items-center gap-3.5 p-4 bg-fundo-cartao hover:bg-fundo-cartao-hover border border-borda hover:border-borda-hover rounded-xl hover:-translate-y-[2px] transition-all duration-250 hover:shadow-md cursor-pointer relative overflow-hidden"
+                className="group flex items-center gap-3.5 p-4 bg-fundo-cartao hover:bg-fundo-cartao-hover border border-borda hover:border-borda-hover rounded-xl hover:-translate-y-0.5 transition-all duration-250 hover:shadow-md cursor-pointer relative overflow-hidden"
                 style={{ '--card-accent': bloco.color || 'var(--color-destaque)' } as React.CSSProperties}
               >
                 <div 
@@ -56,7 +55,7 @@ export default function MapaGeralPage() {
                   </p>
                 </div>
                 
-                <ArrowRight className="text-texto-auxiliar group-hover:text-[var(--card-accent)] group-hover:translate-x-1 transition-all duration-150" size={18} />
+                <ArrowRight className="text-texto-auxiliar group-hover:text-(--card-accent) group-hover:translate-x-1 transition-all duration-150" size={18} />
               </Link>
             </div>
           ))}
