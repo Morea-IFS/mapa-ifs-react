@@ -52,7 +52,7 @@ export default function SideBar() {
           <div className="flex items-center gap-2.5">
             <span className="text-2xl" aria-hidden="true"><Map className="text-destaque" /></span>
             <span className="text-lg font-bold bg-linear-to-br from-destaque to-indigo-500 bg-clip-text text-transparent tracking-tight">
-              If Map
+              MERO
             </span>
           </div>
         </div>
