@@ -8,8 +8,11 @@ import { ArrowRight } from 'lucide-react';
 const CampusMap = dynamic(() => import('@/components/CampusMap'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-125 md:h-150 rounded-2xl overflow-hidden border border-borda shadow-lg relative flex items-center justify-center bg-fundo-secundario text-texto-auxiliar">
-      Carregando mapa interativo...
+    <div className="w-full h-[70vh] min-h-400px max-h-600px md:h-500px md:min-h-400px md:max-h-550px rounded-2xl overflow-hidden border border-borda shadow-lg relative flex items-center justify-center bg-fundo-secundario text-texto-auxiliar">
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-8 h-8 border-2 border-destaque border-t-transparent rounded-full animate-spin" />
+        <span className="text-sm">Carregando mapa interativo...</span>
+      </div>
     </div>
   )
 });
@@ -39,23 +42,25 @@ export default function MapaGeralPage() {
             <div key={bloco.id} className="animate-in fade-in duration-500 fill-mode-both">
               <Link
                 href={`/bloco/${bloco.id}`}
-                className="group flex items-center gap-3.5 p-4 bg-fundo-cartao hover:bg-fundo-cartao-hover border border-borda hover:border-borda-hover rounded-xl hover:-translate-y-0.5 transition-all duration-250 hover:shadow-md cursor-pointer relative overflow-hidden"
+                className="group flex items-start gap-3.5 p-4 bg-fundo-cartao hover:bg-fundo-cartao-hover border border-borda hover:border-borda-hover rounded-xl hover:-translate-y-0.5 transition-all duration-250 hover:shadow-md cursor-pointer relative overflow-hidden"
                 style={{ '--card-accent': bloco.color || 'var(--color-destaque)' } as React.CSSProperties}
               >
                 <div 
-                  className="w-1 h-8 rounded-sm shrink-0 shadow-[0_0_10px_color-mix(in_srgb,var(--card-accent)_40%,transparent)]"
+                  className="w-1 self-stretch rounded-sm shrink-0 shadow-[0_0_10px_color-mix(in_srgb,var(--card-accent)_40%,transparent)]"
                   style={{ backgroundColor: 'var(--card-accent)' }}
                 />
                 
                 <div className="flex-1 min-w-0">
                   <h3 className="text-[15px] font-semibold text-texto-principal mb-0.5">{bloco.name}</h3>
-                  <p className="text-xs text-texto-auxiliar">
-                    {bloco.floors.length} {bloco.floors.length === 1 ? 'andar' : 'andares'} ·{' '}
-                    {bloco.floors.reduce((acc, f) => acc + f.rooms.length, 0)} salas
+                  <p className="text-[11px] text-texto-auxiliar leading-relaxed mb-1.5 line-clamp-2">
+                    {bloco.description.replace(/^Bloco[s]?\s\w+\s—\s/, '')}
+                  </p>
+                  <p className="text-[11px] text-texto-auxiliar">
+                    {bloco.floors.length} {bloco.floors.length === 1 ? 'andar' : 'andares'} · {bloco.floors.reduce((acc, f) => acc + f.rooms.length, 0)} salas
                   </p>
                 </div>
                 
-                <ArrowRight className="text-texto-auxiliar group-hover:text-(--card-accent) group-hover:translate-x-1 transition-all duration-150" size={18} />
+                <ArrowRight className="text-texto-auxiliar group-hover:text-(--card-accent) group-hover:translate-x-1 transition-all duration-150 mt-1 shrink-0" size={18} />
               </Link>
             </div>
           ))}
