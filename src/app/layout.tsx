@@ -9,7 +9,7 @@ import VLibrasWidget from '@/components/VLibrasWidget';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'Mapa IFS — Campus Interativo',
+  title: 'MERO — Campus Interativo',
   description: 'Mapa interativo do campus IFS - Navegue pelos blocos, laboratórios e setores',
 };
 
