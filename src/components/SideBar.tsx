@@ -34,9 +34,9 @@ export default function SideBar() {
         aria-expanded={isOpen}
         aria-controls="menu-lateral"
       >
-        <span className={`block w-5 h-0.5 bg-texto-principal rounded-xs transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-1.75' : ''}`} aria-hidden="true" />
-        <span className={`block w-5 h-0.5 bg-texto-principal rounded-xs transition-all duration-300 ${isOpen ? 'opacity-0' : ''}`} aria-hidden="true" />
-        <span className={`block w-5 h-0.5 bg-texto-principal rounded-xs transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-1.75' : ''}`} aria-hidden="true" />
+        <span className={`block w-5 h-0.5 bg-texto-principal rounded-xs transition-all duration-300 pointer-events-none ${isOpen ? 'rotate-45 translate-y-1.75' : ''}`} aria-hidden="true" />
+        <span className={`block w-5 h-0.5 bg-texto-principal rounded-xs transition-all duration-300 pointer-events-none ${isOpen ? 'opacity-0' : ''}`} aria-hidden="true" />
+        <span className={`block w-5 h-0.5 bg-texto-principal rounded-xs transition-all duration-300 pointer-events-none ${isOpen ? '-rotate-45 -translate-y-1.75' : ''}`} aria-hidden="true" />
       </button>
 
       {/* Painel da SideBar */}

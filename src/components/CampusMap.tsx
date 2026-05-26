@@ -39,7 +39,7 @@ function createMarkerIcon(color: string, label: string): L.DivIcon {
 export default function CampusMap() {
   return (
     <div 
-      className="w-full h-[350px] md:h-[500px] rounded-2xl overflow-hidden border border-borda shadow-lg relative transition-all duration-300"
+      className="w-full h-[70vh] min-h-100 max-h-150 md:h-125 md:min-h-100 md:max-h-137.5 rounded-2xl overflow-hidden border border-borda hover:border-borda-hover shadow-lg hover:shadow-2xl relative transition-all duration-300 campus-map-wrapper"
       role="application"
       aria-label="Mapa interativo do campus"
     >

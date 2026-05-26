@@ -33,14 +33,14 @@ export default function BlocoPage() {
 
   return (
     <motion.div
-      className="min-h-screen max-w-[900px] mx-auto p-4 md:p-6"
+      className="min-h-screen max-w-900px mx-auto p-4 md:p-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
       {/* Header */}
       <div className="text-center py-10 md:py-12 pb-8" style={{ '--local-accent': accentColor } as React.CSSProperties}>
-        <Link href="/" className="inline-flex items-center gap-1 text-[13px] font-medium text-texto-muted hover:text-[var(--local-accent)] mb-5 transition-colors duration-150">
+        <Link href="/" className="inline-flex items-center gap-1 text-[13px] font-medium text-texto-muted hover:text-var(--local-accent) mb-5 transition-colors duration-150">
           <ArrowLeft size={16} /> Mapa
         </Link>
         <motion.h1
@@ -53,7 +53,7 @@ export default function BlocoPage() {
           {bloco.name}
         </motion.h1>
         <motion.p
-          className="text-[0.95rem] text-texto-secundario max-w-[600px] mx-auto leading-relaxed"
+          className="text-[0.95rem] text-texto-secundario max-w-150 mx-auto leading-relaxed"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.4 }}
@@ -68,11 +68,11 @@ export default function BlocoPage() {
           transition={{ delay: 0.4, duration: 0.4 }}
         >
           <div className="flex items-center gap-1.5 px-4 py-2 bg-fundo-cartao border border-borda rounded-full font-medium text-[13px] shadow-sm">
-            <span className="font-bold text-[var(--local-accent)]">{bloco.floors.length}</span>
+            <span className="font-bold text-var(--local-accent)">{bloco.floors.length}</span>
             <span className="text-texto-auxiliar">{bloco.floors.length === 1 ? 'Andar' : 'Andares'}</span>
           </div>
           <div className="flex items-center gap-1.5 px-4 py-2 bg-fundo-cartao border border-borda rounded-full font-medium text-[13px] shadow-sm">
-            <span className="font-bold text-[var(--local-accent)]">{totalRooms}</span>
+            <span className="font-bold text-var(--local-accent)">{totalRooms}</span>
             <span className="text-texto-auxiliar">Salas</span>
           </div>
         </motion.div>
@@ -89,7 +89,7 @@ export default function BlocoPage() {
             transition={{ delay: 0.3 + index * 0.15, duration: 0.5 }}
             style={{ '--local-accent': accentColor } as React.CSSProperties}
           >
-            <h2 className="text-base font-semibold text-[var(--local-accent)] pt-5 px-5 md:px-6 tracking-tight">
+            <h2 className="text-base font-semibold text-var(--local-accent) pt-5 px-5 md:px-6 tracking-tight">
               {floor.name}
             </h2>
 
@@ -108,7 +108,7 @@ export default function BlocoPage() {
                 </div>
               </div>
 
-              <div className="w-full md:w-[240px] shrink-0">
+              <div className="w-full md:w-60 shrink-0">
                 <h3 className="text-xs font-semibold uppercase tracking-[1px] text-texto-auxiliar mb-3" id={`title-rooms-${index}`}>
                   Salas e Setores
                 </h3>
