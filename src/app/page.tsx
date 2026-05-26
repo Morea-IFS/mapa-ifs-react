@@ -22,8 +22,11 @@ export default function MapaGeralPage() {
     <div className="min-h-screen p-4 md:p-8 max-w-300 mx-auto animate-in fade-in duration-500">
       <div className="text-center py-10 pb-6">
         <h1 className="text-3xl md:text-7xl font-bold tracking-tight bg-linear-to-br from-destaque via-indigo-500 to-purple-500 bg-clip-text text-transparent mb-2">
-          If Map
+          MERO
         </h1>
+        <p className="text-[0.95rem] text-texto-secundario">
+          Mapa de Espaços e Representação de Orientação.
+        </p>
         <p className="text-[0.95rem] text-texto-secundario">
           Um mapa do campus para facilitar sua navegação e localização de salas, blocos e outros pontos de interesse.
         </p>

@@ -1,6 +1,5 @@
 import { BlocoData } from '../types';
 
-// Import all floor plan images
 import blocoAInferior from '@/assets/mapas/blocoA_inferior.png';
 import blocoASuperior from '@/assets/mapas/blocoA_superior.png';
 import blocoBInferior from '@/assets/mapas/blocoB_inferior.png';
