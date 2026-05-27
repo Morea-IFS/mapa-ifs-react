@@ -11,13 +11,22 @@ export interface Floor {
   rooms: Room[];
 }
 
+export interface MapCoordinates {
+  x: number;
+  y: number;
+}
+
 export interface BlocoData {
   id: string;
   name: string;
   description: string;
   floors: Floor[];
-  /** Position on the campus map as percentage [x%, y%] from top-left */
-  mapPosition: { x: number; y: number };
+  /** Positions on the campus map as percentage [x%, y%] from top-left for each floor */
+  mapPosition: {
+    terreo?: MapCoordinates;
+    superior?: MapCoordinates;
+    subsolo?: MapCoordinates;
+  };
   /** Color for the marker on the map */
   color?: string;
 }

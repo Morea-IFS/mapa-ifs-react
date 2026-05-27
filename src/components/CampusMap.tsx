@@ -1,17 +1,33 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { MapContainer, ImageOverlay, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import Link from 'next/link';
 import { blocos } from '@/data/blocos';
-import mapaImg from '@/assets/mapa_geral.png';
-import 'leaflet/dist/leaflet.css'; // Mantenha isso
+import mapaTerreo from '@/assets/mapa_geral.png';
+import mapaSuperior from '@/assets/mapa_geral_superior.png';
+import mapaSubsolo from '@/assets/mapa_geral_subsolo.png';
+import 'leaflet/dist/leaflet.css';
+import type { FloorLevel } from './FloorSwitcher';
 
 // Map image dimensions
 const MAP_WIDTH = 1000;
 const MAP_HEIGHT = 600;
 const bounds: L.LatLngBoundsExpression = [[0, 0], [MAP_HEIGHT, MAP_WIDTH]];
+
+// Define which blocks exist on each floor
+const FLOOR_BLOCKS: Record<FloorLevel, Set<string>> = {
+  terreo: new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']),
+  superior: new Set(['A', 'B', 'C', 'D', 'F', 'G', 'H']), // all except E
+  subsolo: new Set(['D', 'E', 'F']),
+};
+
+const MAP_IMAGES: Record<FloorLevel, typeof mapaTerreo> = {
+  terreo: mapaTerreo,
+  superior: mapaSuperior,
+  subsolo: mapaSubsolo,
+};
 
 function FitBounds() {
   const map = useMap();
@@ -23,7 +39,7 @@ function FitBounds() {
 
 function createMarkerIcon(color: string, label: string): L.DivIcon {
   return new L.DivIcon({
-    className: 'campus-marker-wrapper', // mantido para CSS global (leaflet inject)
+    className: 'campus-marker-wrapper',
     html: `
       <div class="campus-marker" style="--marker-color: ${color}">
         <div class="campus-marker-pulse"></div>
@@ -36,19 +52,52 @@ function createMarkerIcon(color: string, label: string): L.DivIcon {
   });
 }
 
-export default function CampusMap() {
+interface CampusMapProps {
+  floor?: FloorLevel;
+}
+
+export default function CampusMap({ floor = 'terreo' }: CampusMapProps) {
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [displayedFloor, setDisplayedFloor] = useState<FloorLevel>(floor);
+
+  // Animate floor transition
+  useEffect(() => {
+    if (floor !== displayedFloor) {
+      setIsTransitioning(true);
+      const timer = setTimeout(() => {
+        setDisplayedFloor(floor);
+        setIsTransitioning(false);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [floor, displayedFloor]);
+
+  const visibleBlocos = useMemo(
+    () => blocos.filter((b) => FLOOR_BLOCKS[displayedFloor].has(b.id)),
+    [displayedFloor]
+  );
+
+  const mapImage = MAP_IMAGES[displayedFloor];
+
   return (
     <div 
       className="w-full h-[70vh] min-h-100 max-h-150 md:h-125 md:min-h-100 md:max-h-137.5 rounded-2xl overflow-hidden border border-borda hover:border-borda-hover shadow-lg hover:shadow-2xl relative transition-all duration-300 campus-map-wrapper"
       role="application"
-      aria-label="Mapa interativo do campus"
+      aria-label={`Mapa interativo do campus — ${displayedFloor === 'terreo' ? 'Térreo' : displayedFloor === 'superior' ? 'Andar Superior' : 'Subsolo'}`}
     >
       
+      {/* Transition overlay */}
+      <div 
+        className={`absolute inset-0 bg-fundo-principal/60 z-[1000] pointer-events-none transition-opacity duration-200 ${
+          isTransitioning ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+
       {/* Bloco Invisível para Leitores de Tela (Acessibilidade) */}
       <div className="sr-only" aria-live="polite">
         <h2>Lista de Blocos e Navegação Alternativa</h2>
         <ul role="list">
-          {blocos.map((bloco) => (
+          {visibleBlocos.map((bloco) => (
             <li key={`sr-${bloco.id}`} role="listitem">
               <Link href={`/bloco/${bloco.id}`} aria-label={`Navegar para os detalhes do ${bloco.name}`}>
                 O {bloco.name} contém {bloco.description} Selecione para acessar as plantas e visualizar os laboratórios disponíveis.
@@ -74,16 +123,19 @@ export default function CampusMap() {
         attributionControl={false}
       >
         <FitBounds />
-        <ImageOverlay url={mapaImg.src} bounds={bounds} />
+        <ImageOverlay url={mapImage.src} bounds={bounds} />
 
-        {blocos.map((bloco) => {
-          const lat = MAP_HEIGHT * (1 - bloco.mapPosition.y / 100);
-          const lng = MAP_WIDTH * (bloco.mapPosition.x / 100);
+        {visibleBlocos.map((bloco) => {
+          const pos = bloco.mapPosition[displayedFloor];
+          if (!pos) return null;
+          
+          const lat = MAP_HEIGHT * (1 - pos.y / 100);
+          const lng = MAP_WIDTH * (pos.x / 100);
           const color = bloco.color || 'var(--color-destaque)';
 
           return (
             <Marker
-              key={bloco.id}
+              key={`${bloco.id}-${displayedFloor}`}
               position={[lat, lng]}
               icon={createMarkerIcon(color, bloco.name)}
             >

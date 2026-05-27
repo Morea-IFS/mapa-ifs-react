@@ -1,9 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { blocos } from '@/data/blocos';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import FloorSwitcher, { type FloorLevel } from '@/components/FloorSwitcher';
 
 const CampusMap = dynamic(() => import('@/components/CampusMap'), {
   ssr: false,
@@ -18,6 +20,8 @@ const CampusMap = dynamic(() => import('@/components/CampusMap'), {
 });
 
 export default function MapaGeralPage() {
+  const [currentFloor, setCurrentFloor] = useState<FloorLevel>('terreo');
+
   return (
     <div className="min-h-screen p-4 md:p-8 max-w-300 mx-auto animate-in fade-in duration-500">
       <div className="text-center py-10 pb-6">
@@ -32,8 +36,13 @@ export default function MapaGeralPage() {
         </p>
       </div>
 
+      {/* Floor Switcher */}
+      <div className="mx-auto mb-4 max-w-xs animate-in slide-in-from-bottom-2 duration-500">
+        <FloorSwitcher currentFloor={currentFloor} onFloorChange={setCurrentFloor} />
+      </div>
+
       <div className="mx-auto mb-10 w-full animate-in slide-in-from-bottom-4 duration-700">
-        <CampusMap />
+        <CampusMap floor={currentFloor} />
       </div>
 
       <div className="pb-16">
