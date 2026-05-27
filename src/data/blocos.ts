@@ -25,7 +25,10 @@ export const blocos: BlocoData[] = [
     name: 'Bloco A',
     description:
       'Bloco A — abriga a CRE, Biblioteca, Sala de Reunião, DEN, Direção Geral e outros setores essenciais do campus.',
-    mapPosition: { x: 35, y: 87 },
+    mapPosition: { 
+      terreo: { x: 34, y: 95 },
+      superior: { x: 40, y: 95 }
+    },
     color: '#00d9ff',
     floors: [
       {
@@ -61,7 +64,10 @@ export const blocos: BlocoData[] = [
     name: 'Bloco B',
     description:
       'Bloco B — abriga as Salas de 1 a 7, Salas de Desenhos e Projetos, Laboratórios de Natureza, Laboratório de Desenho Técnico em CAD.',
-    mapPosition: { x: 57, y: 71 },
+    mapPosition: { 
+      terreo: { x: 65, y: 76 },
+      superior: { x: 70, y: 78 }
+    },
     color: '#ff6b6b',
     floors: [
       {
@@ -93,7 +99,10 @@ export const blocos: BlocoData[] = [
     name: 'Bloco C',
     description:
       'Bloco C — abriga as Salas de 8 a 10, Sophia Polis, Labic, Mini Auditório, Laboratórios.',
-    mapPosition: { x: 38, y: 58 },
+    mapPosition: { 
+      terreo: { x: 34, y: 59 },
+      superior: { x: 40, y: 61 }
+    },
     color: '#ffd93d',
     floors: [
       {
@@ -134,7 +143,11 @@ export const blocos: BlocoData[] = [
     name: 'Bloco D',
     description:
       'Bloco D — abriga as CEEL, Laboratórios, EMEC, Sala de Pesquisa COED.',
-    mapPosition: { x: 55, y: 45 },
+    mapPosition: { 
+      terreo: { x: 65, y: 45 },
+      superior: { x: 70, y: 45 },
+      subsolo: { x: 49, y: 54 }
+    },
     color: '#6bcb77',
     floors: [
       {
@@ -182,7 +195,10 @@ export const blocos: BlocoData[] = [
     name: 'Bloco E',
     description:
       'Bloco E — abriga COAU, COED, Canteiro de Obras, Sala de Plástica, Ateliês.',
-    mapPosition: { x: 72, y: 59 },
+    mapPosition: { 
+      terreo: { x: 87, y: 60 },
+      subsolo: { x: 68, y: 75 }
+    },
     color: '#c084fc',
     floors: [
       {
@@ -213,7 +229,11 @@ export const blocos: BlocoData[] = [
     name: 'Bloco F',
     description:
       'Bloco F — abriga a COIRC/BSI, Morea, Laboratórios de Informática, Laboratório de Redes, CEEL.',
-    mapPosition: { x: 57, y: 25 },
+    mapPosition: { 
+      terreo: { x: 65, y: 20 },
+      superior: { x: 73, y: 20 },
+      subsolo: { x: 44, y: 25 }
+    },
     color: '#ff922b',
     floors: [
       {
@@ -259,7 +279,10 @@ export const blocos: BlocoData[] = [
     name: 'Bloco G',
     description:
       'Blocos F e G — abriga a Cantina, Refeitório, Área de Convívio, CLF, Laboratório de Física.',
-    mapPosition: { x: 47, y: 25 },
+    mapPosition: { 
+      terreo: { x: 50, y: 20 },
+      superior: { x: 57, y: 20 }
+    },
     color: '#20c997',
     floors: [
       {
@@ -286,7 +309,10 @@ export const blocos: BlocoData[] = [
     name: 'Bloco H',
     description:
       'Bloco H — abriga o Auditório, Banheiro, Containers, Comunicação, Motoristas.',
-    mapPosition: { x: 21, y: 74 },
+    mapPosition: { 
+      terreo: { x: 15, y: 79 },
+      superior: { x: 23, y: 78 }
+    },
     color: '#f06595',
     floors: [
       {
