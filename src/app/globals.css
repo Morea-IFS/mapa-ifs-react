@@ -5,33 +5,34 @@
   --color-fundo-secundario: var(--fundo-secundario);
   --color-fundo-cartao: var(--fundo-cartao);
   --color-fundo-cartao-hover: var(--fundo-cartao-hover);
-  
+
   --color-texto-principal: var(--texto-principal);
   --color-texto-secundario: var(--texto-secundario);
   --color-texto-auxiliar: var(--texto-auxiliar);
-  
+
   --color-destaque: var(--destaque);
   --color-destaque-fraco: var(--destaque-fraco);
-  
+
   --color-borda: var(--borda);
   --color-borda-hover: var(--borda-hover);
 
   --font-inter: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
-:root, :root[data-tema="escuro"] {
+:root,
+:root[data-tema="escuro"] {
   --fundo-principal: #0a0a0f;
   --fundo-secundario: #12121a;
   --fundo-cartao: rgba(20, 20, 30, 0.85);
   --fundo-cartao-hover: rgba(25, 25, 40, 0.95);
-  
+
   --texto-principal: #eaeaea;
   --texto-secundario: #a0a0b0;
   --texto-auxiliar: #6a6a7a;
-  
+
   --destaque: #00d9ff;
   --destaque-fraco: rgba(0, 217, 255, 0.15);
-  
+
   --borda: rgba(255, 255, 255, 0.06);
   --borda-hover: rgba(255, 255, 255, 0.12);
 }
@@ -41,14 +42,14 @@
   --fundo-secundario: #e5e7eb;
   --fundo-cartao: #ffffff;
   --fundo-cartao-hover: #f3f4f6;
-  
+
   --texto-principal: #111827;
   --texto-secundario: #4b5563;
   --texto-auxiliar: #9ca3af;
-  
+
   --destaque: #0ea5e9;
   --destaque-fraco: rgba(14, 165, 233, 0.15);
-  
+
   --borda: #d1d5db;
   --borda-hover: #9ca3af;
 }
@@ -58,14 +59,14 @@
   --fundo-secundario: #000000;
   --fundo-cartao: #000000;
   --fundo-cartao-hover: #1a1a1a;
-  
+
   --texto-principal: #ffff00;
   --texto-secundario: #ffffff;
   --texto-auxiliar: #cccccc;
-  
+
   --destaque: #00ff00;
   --destaque-fraco: rgba(0, 255, 0, 0.2);
-  
+
   --borda: #ffffff;
   --borda-hover: #ffff00;
 }
@@ -90,13 +91,16 @@ body {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--fundo-principal);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--borda);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--destaque);
 }
@@ -113,7 +117,7 @@ body {
 
 .campus-map-wrapper:hover {
   box-shadow: 0 4px 30px rgba(0, 217, 255, 0.08),
-              0 0 60px rgba(0, 217, 255, 0.04);
+    0 0 60px rgba(0, 217, 255, 0.04);
 }
 
 .campus-map-container {
@@ -141,7 +145,7 @@ body {
   background: var(--marker-color, var(--destaque));
   border: 2px solid var(--fundo-principal);
   box-shadow: 0 0 12px var(--marker-color, var(--destaque)),
-              0 0 24px color-mix(in srgb, var(--marker-color, var(--destaque)) 40%, transparent);
+    0 0 24px color-mix(in srgb, var(--marker-color, var(--destaque)) 40%, transparent);
   position: relative;
   z-index: 2;
   transition: transform 0.2s ease;
@@ -176,10 +180,13 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.3;
   }
+
   50% {
     transform: translate(-50%, -50%) scale(2);
     opacity: 0;
@@ -192,7 +199,7 @@ body {
   backdrop-filter: blur(16px);
   border: 1px solid var(--borda);
   border-radius: 12px !important;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.5) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
   color: var(--texto-principal) !important;
   padding: 0 !important;
 }
@@ -211,7 +218,7 @@ body {
   border: 1px solid var(--borda) !important;
   border-radius: 8px !important;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 
 .leaflet-control-zoom a {
@@ -227,4 +234,143 @@ body {
 .leaflet-control-zoom a:hover {
   background: var(--fundo-cartao-hover) !important;
   color: var(--destaque) !important;
+}
+
+/* =========================================================
+   ROUTE OVERLAY — adicionar ao globals.css
+   Copie este bloco para dentro do seu globals.css existente,
+   após os estilos do Leaflet Map.
+   ========================================================= */
+
+/* ── Linha pontilhada animada ── */
+.route-animated-dash {
+  stroke-dashoffset: 0;
+  animation: dash-flow 1.2s linear infinite;
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -36;
+  }
+}
+
+/* ── Wrapper genérico (sem borda/bg do Leaflet) ── */
+.route-waypoint-wrapper,
+.route-arrow-wrapper,
+.route-transition-wrapper {
+  background: none !important;
+  border: none !important;
+}
+
+/* ── Marcadores de origem e destino ── */
+.route-waypoint {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.route-waypoint-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2.5px solid var(--fundo-principal);
+  position: relative;
+  z-index: 2;
+}
+
+.route-waypoint-dot--origin {
+  background-color: #00d9ff;
+  box-shadow: 0 0 14px #00d9ff, 0 0 28px rgba(0, 217, 255, 0.4);
+}
+
+.route-waypoint-dot--dest {
+  background-color: #f06595;
+  box-shadow: 0 0 14px #f06595, 0 0 28px rgba(240, 101, 149, 0.4);
+}
+
+.route-waypoint-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  opacity: 0.35;
+  animation: route-pulse 1.8s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.route-waypoint-pulse--origin {
+  background-color: #00d9ff;
+}
+
+.route-waypoint-pulse--dest {
+  background-color: #f06595;
+}
+
+@keyframes route-pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(2.2);
+    opacity: 0;
+  }
+}
+
+.route-waypoint-label {
+  margin-top: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--texto-principal);
+  text-shadow: 0 1px 4px var(--fundo-principal), 0 0 8px var(--fundo-secundario);
+  white-space: nowrap;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+/* ── Transição de andar (escada/rampa) ── */
+.route-waypoint--transition {
+  align-items: center;
+  justify-content: center;
+}
+
+.route-waypoint-emoji {
+  font-size: 18px;
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.6));
+  animation: route-pulse 2s ease-in-out infinite;
+}
+
+.route-transition-marker {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 217, 255, 0.2);
+  border: 2px solid rgba(0, 217, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* ── Setas de direção ── */
+.route-arrow {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  color: #00d9ff;
+  text-shadow: 0 0 6px rgba(0, 217, 255, 0.8);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
 }

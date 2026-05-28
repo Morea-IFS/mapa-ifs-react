@@ -13,16 +13,19 @@ const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('escuro');
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const storedTheme = localStorage.getItem('mapa-ifs-theme') as Theme | null;
+    const initialTheme = storedTheme || 'escuro';
+    
+    // Atualiza o DOM imediatamente
+    document.documentElement.setAttribute('data-tema', initialTheme);
+    
+    // Adia a atualização do estado do React para o próximo ciclo (macrotask),
+    // evitando o aviso de "cascading renders" (set-state-in-effect)
     if (storedTheme) {
-      setThemeState(storedTheme);
-      document.documentElement.setAttribute('data-tema', storedTheme);
-    } else {
-      document.documentElement.setAttribute('data-tema', 'escuro');
+      const timer = setTimeout(() => setThemeState(storedTheme), 0);
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -32,9 +35,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     document.documentElement.setAttribute('data-tema', newTheme);
   };
 
-  // Garantimos que o Provider sempre exista na árvore
-  // Se não estiver montado, podemos retornar o Provider, 
-  // O value já tem o default. 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
