@@ -12,11 +12,11 @@ interface RouteOverlayProps {
   currentFloor: FloorLevel;
 }
 
-// Map image dimensions (must match CampusMap.tsx)
+// Dimensões da imagem do mapa (devem corresponder a CampusMap.tsx)
 const MAP_WIDTH  = 1000;
 const MAP_HEIGHT = 600;
 
-/** Convert graph percentage coords → Leaflet LatLng */
+/** Converte coordenadas percentuais do grafo → LatLng do Leaflet */
 function toLatLng(x: number, y: number): L.LatLng {
   return L.latLng(MAP_HEIGHT * (1 - y / 100), MAP_WIDTH * (x / 100));
 }
@@ -26,7 +26,7 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
   const layerGroupRef = useRef<L.LayerGroup | null>(null);
 
   useEffect(() => {
-    // Remove previous overlay
+    // Gerenciamento de camada: limpa rota anterior ou cria nova camada para a rota atual
     if (layerGroupRef.current) {
       layerGroupRef.current.clearLayers();
     } else {
@@ -39,7 +39,7 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
     const nodesOnFloor = pathResult.path.filter((n) => n.floor === currentFloor);
 
     if (nodesOnFloor.length < 2) {
-      // Floor has only one point (transition floor) - show indicator
+      // CASO ESPECIAL: Rota sem pontos suficientes neste andar (ex: transição direta entre andares)
       const transitionNode = pathResult.path.find(
         (n) => (n.type === 'stairs' || n.type === 'ramp') && n.floor !== currentFloor
       );
@@ -81,7 +81,7 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
 
     // Renderiza individualmente cada segmento desconectado no mapa Leaflet
     segments.forEach((points) => {
-      // ── Shadow / halo line (for contrast) ──
+      // ── Linha de fundo para criar um "halo" de destaque por baixo da linha principal ──
       L.polyline(points, {
         color: '#000000',
         weight: 9,
@@ -90,7 +90,7 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
         lineJoin: 'round',
       }).addTo(lg);
 
-      // ── Main dashed route line ──
+      // ── Linha principal da rota (tracejada) ──
       const routeLine = L.polyline(points, {
         color: 'var(--route-color, #00d9ff)',
         weight: 4,
@@ -100,7 +100,7 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
         dashArray: '10, 8',
       });
 
-      // We need to set a CSS class on the SVG element to animate it
+      // Aplica classe CSS para animação de dash (definida em globals.css) quando a linha for adicionada ao mapa
       routeLine.on('add', () => {
         const el = (routeLine as L.Polyline & { _path?: SVGElement })._path;
         if (el) {
@@ -111,7 +111,7 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
 
       routeLine.addTo(lg);
 
-      // ── Direction arrows along the path (Processado por segmento interno) ──
+      // ── Setas de direção ao longo da rota (Processado por segmento interno) ──
       if (points.length >= 2) {
         for (let i = 0; i < points.length - 1; i++) {
           const mid = L.latLng(
@@ -133,7 +133,7 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
       }
     });
 
-    // ── Highlight nodes: stairs/ramps on this floor ──
+    // ── Marcadores de transição entre andares ──
     nodesOnFloor
       .filter((n) => n.type === 'stairs' || n.type === 'ramp')
       .forEach((node) => {
@@ -149,7 +149,7 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
         L.marker(pos, { icon, interactive: false }).addTo(lg);
       });
 
-    // ── Origin marker ──
+    // ── Marcador de origem ──
     const fromNode = NODE_MAP.get(fromId);
     if (fromNode && fromNode.floor === currentFloor) {
       const pos = toLatLng(fromNode.x, fromNode.y);
@@ -166,7 +166,7 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
       L.marker(pos, { icon, interactive: false }).addTo(lg);
     }
 
-    // ── Destination marker ──
+    // ── Marcador de destino ──
     const toNode = NODE_MAP.get(toId);
     if (toNode && toNode.floor === currentFloor) {
       const pos = toLatLng(toNode.x, toNode.y);
@@ -183,7 +183,7 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
       L.marker(pos, { icon, interactive: false }).addTo(lg);
     }
 
-    // Cleanup on unmount or re-render
+    // Limpa a camada de rota ao desmontar o componente ou quando a rota/andar mudar
     return () => {
       layerGroupRef.current?.clearLayers();
     };

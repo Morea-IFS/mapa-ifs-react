@@ -29,7 +29,7 @@ export default function MapaGeralPage() {
   const handleRouteChange = useCallback((result: RouteResult | null) => {
     setRouteResult(result);
 
-    // Auto-switch to the floor where the origin room is
+    // Se uma rota for encontrada, tente extrair o andar inicial para centralizar o mapa
     if (result) {
       const originNode = NAV_NODES.find((n) => n.id === result.fromId);
       if (originNode) setCurrentFloor(originNode.floor);
@@ -143,7 +143,7 @@ export default function MapaGeralPage() {
         onClose={() => setDrawerOpen(false)}
         onRouteChange={(result) => {
           handleRouteChange(result);
-          if (result) setDrawerOpen(false); // close drawer after route is found
+          if (result) setDrawerOpen(false); // Fechar o drawer apenas se uma rota for encontrada, permitindo que o usuário corrija a busca caso contrário
         }}
       />
     </div>

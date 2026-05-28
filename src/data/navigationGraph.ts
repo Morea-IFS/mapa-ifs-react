@@ -21,10 +21,7 @@ export interface NavEdge {
 // NÓS DO GRAFO
 export const NAV_NODES: NavNode[] = [
 
-  // ════════════════════════════════════════════════════════════════════════
-  // ── TÉRREO ──────────────────────────────────────────────────────────────
-  // ════════════════════════════════════════════════════════════════════════
-
+  // ── TÉRREO 
   // ── Corredores e Junções Principais (Térreo) ──
   { id: 'T_CORRIDOR_Oeste_1',   x: 21.83, y: 87.79, floor: 'terreo', type: 'corridor' },
   { id: 'T_CORRIDOR_Oeste_2',   x: 21.94, y: 69.20, floor: 'terreo', type: 'corridor' },
@@ -113,7 +110,7 @@ export const NAV_NODES: NavNode[] = [
   { id: 'T_E03',                x: 86.79, y: 60.82, floor: 'terreo', type: 'room', label: 'Laboratório CAD' },
   { id: 'T_E04',                x: 86.04, y: 61.89, floor: 'terreo', type: 'room', label: 'Ateliê de arquitetura' },
   { id: 'T_E_Escada',           x: 87.33, y: 56.72, floor: 'terreo', type: 'stairs',
-    connectsTo: [{ nodeId: 'SUB_E_Escada', floor: 'subsolo' }] }, // Sem menção de S_E_Escada nos dados fornecidos
+    connectsTo: [{ nodeId: 'SUB_E_Escada', floor: 'subsolo' }] },
 
   // ── Bloco F e G (Térreo) ──
   { id: 'T_F_ENTRY',            x: 60.89, y: 19.75, floor: 'terreo', type: 'entrance' },
@@ -161,11 +158,7 @@ export const NAV_NODES: NavNode[] = [
   { id: 'T_Banheiro_F',         x: 62.93, y: 18.94, floor: 'terreo', type: 'bathroom' },
   { id: 'T_Banheiro_H',         x: 23.01, y: 76.67, floor: 'terreo', type: 'bathroom' },
 
-
-  // ════════════════════════════════════════════════════════════════════════
-  // ── ANDAR SUPERIOR ────────────────────────────────────────────────────────
-  // ════════════════════════════════════════════════════════════════════════
-
+  // ── ANDAR SUPERIOR
   // ── Corredores e Junções Principais (Superior) ──
   { id: 'S_CORRIDOR_Oeste_1',   x: 27.93, y: 87.96, floor: 'superior', type: 'corridor' },
   { id: 'S_CORRIDOR_Oeste_2',   x: 27.93, y: 68.73, floor: 'superior', type: 'corridor' },
@@ -217,7 +210,7 @@ export const NAV_NODES: NavNode[] = [
   { id: 'S_JUNCTION_C_Escada',  x: 36.82, y: 61.03, floor: 'superior', type: 'junction' },
   { id: 'S_C10',                x: 33.71, y: 61.25, floor: 'superior', type: 'room', label: 'Mini Auditório' },
   { id: 'S_C11',                x: 35.21, y: 61.46, floor: 'superior', type: 'room', label: 'Lab. Física Moderna' },
-  { id: 'S_C12',                x: 39.17, y: 61.67, floor: 'superior', type: 'room', label: 'Sala EAD' },
+  { id: 'S_C12',                x: 39.17, y: 61.67, floor: 'superior', type: 'room', label: 'Sala EAD / Multimídia' },
   { id: 'S_C13',                x: 41.95, y: 61.46, floor: 'superior', type: 'room', label: 'CCHS' },
   { id: 'S_C14',                x: 43.77, y: 61.25, floor: 'superior', type: 'room', label: 'Sala de Aula 10' },
   { id: 'S_C15',                x: 46.55, y: 61.03, floor: 'superior', type: 'room', label: 'Sala de Aula 9' },
@@ -266,11 +259,7 @@ export const NAV_NODES: NavNode[] = [
   { id: 'S_Banheiro_1', x: 56.40, y: 87.06, floor: 'superior', type: 'bathroom' },
   { id: 'S_Banheiro_2', x: 56.29, y: 38.56, floor: 'superior', type: 'bathroom'  },
 
-
-  // ════════════════════════════════════════════════════════════════════════
-  // ── SUBSOLO ─────────────────────────────────────────────────────────────
-  // ════════════════════════════════════════════════════════════════════════
-
+  // ── SUBSOLO
   // ── Corredores e Junções (Subsolo) ──
   { id: 'SUB_CORRIDOR',         x: 57.36, y: 63.81, floor: 'subsolo', type: 'corridor' },
   { id: 'SUB_CORRIDOR_F',       x: 60.57, y: 36.46, floor: 'subsolo', type: 'corridor' },
@@ -311,14 +300,10 @@ export const NAV_NODES: NavNode[] = [
 
 ];
 
-// ============================================================
 // ARESTAS DO GRAFO
-// ============================================================
 export const NAV_EDGES: NavEdge[] = [
 
-  // ════════════════════════════════════════════════════════════════════════
   // ── ROTAS DO TÉRREO ─────────────────────────────────────────────────────
-  // ════════════════════════════════════════════════════════════════════════
 
   // ── Corredor Backbone (Espinha Dorsal Central e Oeste) ──
   { from: 'T_JUNCTION_A_W',       to: 'T_CORRIDOR_Oeste_1' },
@@ -327,7 +312,7 @@ export const NAV_EDGES: NavEdge[] = [
   { from: 'T_CORRIDOR_Oeste_2',   to: 'T_JUNCTION_C_W' },
 
   { from: 'T_JUNCTION_A_L',       to: 'T_CORRIDOR_Central_1' },
-  { from: 'T_CORRIDOR_Central_1', to: 'T_Banheiro_1' }, // Banheiro Térreo
+  { from: 'T_CORRIDOR_Central_1', to: 'T_Banheiro_1' }, 
   { from: 'T_Banheiro_1',         to: 'T_JUNCTION_B_W' },
   { from: 'T_JUNCTION_B_W',       to: 'T_CORRIDOR_Central_2' },
   { from: 'T_CORRIDOR_Central_2', to: 'T_JUNCTION_C_E' },
@@ -336,7 +321,7 @@ export const NAV_EDGES: NavEdge[] = [
   { from: 'T_JUNCTION_Rampa',     to: 'T_CORRIDOR_Central_4' },
   { from: 'T_CORRIDOR_Central_4', to: 'T_JUNCTION_D_W' },
   { from: 'T_JUNCTION_D_W',       to: 'T_CORRIDOR_Central_5' },
-  { from: 'T_CORRIDOR_Central_5', to: 'T_Banheiro_2' }, // Banheiro Térreo
+  { from: 'T_CORRIDOR_Central_5', to: 'T_Banheiro_2' }, 
   { from: 'T_Banheiro_2',         to: 'T_JUNCTION_FG' },
   { from: 'T_JUNCTION_FG',        to: 'T_CORRIDOR_Central_6' },
   { from: 'T_JUNCTION_FG',        to: 'T_JUNCTION_F' },
@@ -461,11 +446,7 @@ export const NAV_EDGES: NavEdge[] = [
   { from: 'T_JUNCTION_Containers',to: 'T_H04' },
   { from: 'T_JUNCTION_Containers',to: 'T_H05' },
 
-
-  // ════════════════════════════════════════════════════════════════════════
   // ── ROTAS DO ANDAR SUPERIOR ─────────────────────────────────────────────
-  // ════════════════════════════════════════════════════════════════════════
-
   // ── Corredor Backbone Superior ──
   { from: 'S_JUNCTION_A_W',       to: 'S_CORRIDOR_Oeste_1' },
   { from: 'S_CORRIDOR_Oeste_1',   to: 'S_H_ENTRY' },
@@ -567,11 +548,7 @@ export const NAV_EDGES: NavEdge[] = [
   { from: 'S_H_ENTRY',            to: 'S_H06' },
   { from: 'S_H_ENTRY',            to: 'S_H07' },
 
-
-  // ════════════════════════════════════════════════════════════════════════
-  // ── ROTAS DO SUBSOLO ────────────────────────────────────────────────────
-  // ════════════════════════════════════════════════════════════════════════
-
+  // ── ROTAS DO SUBSOLO
   // ── Bloco D (Subsolo) ──
   { from: 'SUB_JUNCTION_D_Escada',to: 'SUB_D_Escada' },
   { from: 'SUB_JUNCTION_D_Escada',to: 'SUB_D15' },
@@ -602,11 +579,7 @@ export const NAV_EDGES: NavEdge[] = [
   { from: 'SUB_JUNCTION_F_Salas', to: 'SUB_F16' },
   { from: 'SUB_JUNCTION_F_Salas', to: 'SUB_F17' },
 
-
-  // ════════════════════════════════════════════════════════════════════════
   // ── TRANSIÇÕES DE ANDARES (Pesos maiores adicionados) ───────────────────
-  // ════════════════════════════════════════════════════════════════════════
-
   { from: 'T_A_Escada',     to: 'S_A_Escada',   weight: 15 },
   { from: 'T_B_Escada',     to: 'S_B_Escada',   weight: 15 },
   { from: 'T_C_Escada',     to: 'S_C_Escada',   weight: 15 },
@@ -623,16 +596,12 @@ export const NAV_EDGES: NavEdge[] = [
 
 ];
 
-// ============================================================
-// LOOKUP TABLES
-// ============================================================
-
-/** Map nodeId → NavNode */
+/** Mapa nodeId → NavNode */
 export const NODE_MAP = new Map<string, NavNode>(
   NAV_NODES.map((n) => [n.id, n])
 );
 
-/** Adjacency list: nodeId → [{ nodeId, weight, accessible }] */
+/** Constrói a lista de adjacência para roteamento */
 export function buildAdjacency(accessibleOnly: boolean): Map<string, { id: string; weight: number; accessible: boolean }[]> {
   const adj = new Map<string, { id: string; weight: number; accessible: boolean }[]>();
 
@@ -640,7 +609,7 @@ export function buildAdjacency(accessibleOnly: boolean): Map<string, { id: strin
     if (accessibleOnly) {
       const nodeA = NODE_MAP.get(a);
       const nodeB = NODE_MAP.get(b);
-      // Block stairs for accessible routing
+      // Se a aresta envolve uma escada, não a inclui no grafo de acessibilidade
       if (nodeA?.type === 'stairs' || nodeB?.type === 'stairs') return;
     }
     if (!adj.has(a)) adj.set(a, []);
@@ -663,9 +632,7 @@ export function buildAdjacency(accessibleOnly: boolean): Map<string, { id: strin
   return adj;
 }
 
-// ============================================================
-// A* PATHFINDING
-// ============================================================
+// ALGORITMO DE ROTEAMENTO: A* para encontrar o caminho mais curto
 
 function heuristic(a: NavNode, b: NavNode): number {
   const dx = a.x - b.x;
@@ -690,14 +657,14 @@ export function findPath(
 
   const adj = buildAdjacency(accessibleOnly);
 
-  // A* open set
+  // A* Algoritimo
   const openSet = new Set<string>([fromId]);
   const cameFrom = new Map<string, string>();
   const gScore   = new Map<string, number>([[fromId, 0]]);
   const fScore   = new Map<string, number>([[fromId, heuristic(startNode, endNode)]]);
 
   while (openSet.size > 0) {
-    // Get node with lowest fScore
+    // Seleciona o nó com o menor fScore
     let current = '';
     let lowestF = Infinity;
     for (const id of openSet) {
@@ -706,7 +673,7 @@ export function findPath(
     }
 
     if (current === toId) {
-      // Reconstruct path
+      // Reconstrói o caminho
       const path: NavNode[] = [];
       let cur = toId;
       while (cur) {
@@ -747,12 +714,10 @@ export function findPath(
     }
   }
 
-  return null; // No path found
+  return null; // Nenhum caminho encontrado
 }
 
-// ============================================================
 // HELPERS: listas de salas por andar para o select
-// ============================================================
 
 export interface RoomOption {
   id: string;
