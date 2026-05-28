@@ -6,7 +6,7 @@ export interface NavNode {
   y: number; // % height
   floor: FloorLevel;
   label?: string;
-  type: 'room' | 'corridor' | 'stairs' | 'ramp' | 'entrance' | 'junction';
+  type: 'room' | 'corridor' | 'stairs' | 'ramp' | 'entrance' | 'junction' | 'bathroom';
   // Se é ponto de transição de andar
   connectsTo?: { nodeId: string; floor: FloorLevel }[];
 }
@@ -155,11 +155,11 @@ export const NAV_NODES: NavNode[] = [
   // ── Instalações Extras e Banheiros (Térreo) ──
   { id: 'T_Ginasio',            x: 50.41, y: 4.79,  floor: 'terreo', type: 'room', label: 'Ginásio Poliesportivo' },
   { id: 'T_Galpao',             x: 63.04, y: 6.93,  floor: 'terreo', type: 'room', label: 'Galpão' },
-  { id: 'T_Banheiro_1',         x: 50.19, y: 85.18, floor: 'terreo', type: 'room', label: 'Banheiro A' },
-  { id: 'T_Banheiro_2',         x: 49.98, y: 37.32, floor: 'terreo', type: 'room', label: 'Banheiro B' },
-  { id: 'T_Banheiro_E',         x: 81.66, y: 58.90, floor: 'terreo', type: 'room', label: 'Banheiro E' },
-  { id: 'T_Banheiro_F',         x: 62.93, y: 18.94, floor: 'terreo', type: 'room', label: 'Banheiro F' },
-  { id: 'T_Banheiro_H',         x: 23.01, y: 76.67, floor: 'terreo', type: 'room', label: 'Banheiro H' },
+  { id: 'T_Banheiro_1',         x: 50.19, y: 85.18, floor: 'terreo', type: 'bathroom' },
+  { id: 'T_Banheiro_2',         x: 49.98, y: 37.32, floor: 'terreo', type: 'bathroom' },
+  { id: 'T_Banheiro_E',         x: 81.66, y: 58.90, floor: 'terreo', type: 'bathroom' },
+  { id: 'T_Banheiro_F',         x: 62.93, y: 18.94, floor: 'terreo', type: 'bathroom' },
+  { id: 'T_Banheiro_H',         x: 23.01, y: 76.67, floor: 'terreo', type: 'bathroom' },
 
 
   // ════════════════════════════════════════════════════════════════════════
@@ -263,8 +263,8 @@ export const NAV_NODES: NavNode[] = [
   { id: 'S_H07',                x: 26.65, y: 76.63, floor: 'superior', type: 'room', label: 'Motoristas' },
 
   // ── Banheiros (Superior) ──
-  { id: 'S_Banheiro_1', x: 56.40, y: 87.06, floor: 'superior', type: 'room', label: 'Banheiro A'   },
-  { id: 'S_Banheiro_2', x: 56.29, y: 38.56, floor: 'superior', type: 'room', label: 'Banheiro B'   },
+  { id: 'S_Banheiro_1', x: 56.40, y: 87.06, floor: 'superior', type: 'bathroom' },
+  { id: 'S_Banheiro_2', x: 56.29, y: 38.56, floor: 'superior', type: 'bathroom'  },
 
 
   // ════════════════════════════════════════════════════════════════════════

@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { X, Navigation, MapPin, ArrowRight, AlertCircle, Accessibility, ChevronDown, Search } from 'lucide-react';
-import { findPath, ROOM_OPTIONS, type RoomOption, type PathResult, type FloorLevel } from '@/data/navigationGraph';
+import { findPath, ROOM_OPTIONS, NODE_MAP, type RoomOption, type PathResult, type FloorLevel } from '@/data/navigationGraph';
 
 interface RouteDrawerProps {
   isOpen: boolean;
@@ -25,6 +25,7 @@ function RoomCombobox({
   excludeId,
   icon: Icon,
   accentColor,
+  isDestination = false, // Nova flag para identificar se é o campo de destino
 }: {
   value: string;
   onChange: (id: string) => void;
@@ -32,6 +33,7 @@ function RoomCombobox({
   excludeId?: string;
   icon: React.ElementType;
   accentColor: string;
+  isDestination?: boolean;
 }) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
@@ -39,14 +41,26 @@ function RoomCombobox({
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
-    return ROOM_OPTIONS.filter(
+    
+    // Injeta a opção genérica inteligente no topo se for o campo de destino
+    const baseOptions = isDestination
+      ? [
+          { id: 'banheiro', label: 'Banheiro (Mais Próximo)', floor: 'terreo' as FloorLevel },
+          ...ROOM_OPTIONS,
+        ]
+      : ROOM_OPTIONS;
+
+    return baseOptions.filter(
       (r) =>
         r.id !== excludeId &&
         (q === '' || r.label.toLowerCase().includes(q))
     ).slice(0, 60);
-  }, [query, excludeId]);
+  }, [query, excludeId, isDestination]);
 
-  const selected = ROOM_OPTIONS.find((r) => r.id === value);
+  // Procura o selecionado considerando a opção virtual também
+  const selected = value === 'banheiro' 
+    ? { id: 'banheiro', label: 'Banheiro (Mais Próximo)', floor: 'terreo' as FloorLevel }
+    : ROOM_OPTIONS.find((r) => r.id === value);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -98,7 +112,7 @@ function RoomCombobox({
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Buscar sala..."
+                placeholder="Buscar sala ou banheiro..."
                 className="flex-1 bg-transparent text-sm text-texto-principal placeholder:text-texto-auxiliar outline-none"
                 aria-label="Buscar sala"
               />
@@ -112,22 +126,31 @@ function RoomCombobox({
                 Nenhuma sala encontrada
               </li>
             ) : (
-              filtered.map((room) => (
-                <li key={room.id} role="option" aria-selected={room.id === value}>
-                  <button
-                    type="button"
-                    onClick={() => { onChange(room.id); setOpen(false); setQuery(''); }}
-                    className={`w-full flex items-start gap-2.5 px-3.5 py-2.5 text-left hover:bg-fundo-cartao-hover transition-colors duration-100 ${
-                      room.id === value ? 'bg-destaque/10' : ''
-                    }`}
-                  >
-                    <span className="mt-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-borda text-texto-auxiliar uppercase shrink-0 leading-none">
-                      {floorLabel[room.floor]}
-                    </span>
-                    <span className="text-sm text-texto-principal leading-snug">{room.label}</span>
-                  </button>
-                </li>
-              ))
+              filtered.map((room) => {
+                const isGeneric = room.id === 'banheiro';
+                return (
+                  <li key={room.id} role="option" aria-selected={room.id === value}>
+                    <button
+                      type="button"
+                      onClick={() => { onChange(room.id); setOpen(false); setQuery(''); }}
+                      className={`w-full flex items-start gap-2.5 px-3.5 py-2.5 text-left hover:bg-fundo-cartao-hover transition-colors duration-100 ${
+                        room.id === value ? 'bg-destaque/10' : ''
+                      }`}
+                    >
+                      <span className={`mt-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md border uppercase shrink-0 leading-none ${
+                        isGeneric 
+                          ? 'border-destaque/30 bg-destaque/10 text-destaque font-extrabold' 
+                          : 'border-borda text-texto-auxiliar'
+                      }`}>
+                        {isGeneric ? '🚗 Auto' : floorLabel[room.floor]}
+                      </span>
+                      <span className={`text-sm leading-snug ${isGeneric ? 'text-destaque font-medium' : 'text-texto-principal'}`}>
+                        {room.label}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })
             )}
           </ul>
         </div>
@@ -179,10 +202,12 @@ function RouteSteps({ result }: { result: PathResult }) {
         text: `${dir} pela rampa — ${node.label ?? 'Rampa'}`,
       });
     }
-    if (node.type === 'room') {
+    if (node.type === 'room' || node.type === 'bathroom') {
       steps.push({
         type: 'room',
-        icon: <MapPin size={14} className="text-destaque shrink-0 mt-0.5" aria-hidden />,
+        icon: node.type === 'bathroom' 
+          ? <span aria-hidden className="text-base shrink-0 mt-0.5">🚻</span>
+          : <MapPin size={14} className="text-destaque shrink-0 mt-0.5" aria-hidden />,
         text: node.label ?? node.id,
       });
     }
@@ -229,9 +254,34 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
     setLoading(true);
     setError('');
 
-    // Wrap in setTimeout so the UI can re-render the loading state first
     setTimeout(() => {
-      const path = findPath(fromId, toId, accessible);
+      let path: PathResult | null = null;
+      let finalToId = toId;
+
+      const isBathroomTarget = toId.toLowerCase().includes('banheiro');
+
+      if (isBathroomTarget && typeof NODE_MAP !== 'undefined') {
+        const bathroomNodes = Array.from(NODE_MAP.values()).filter(
+          (n) =>
+            n.type === 'bathroom' ||
+            n.id.toLowerCase().includes('banheiro') ||
+            n.label?.toLowerCase().includes('banheiro')
+        );
+
+        let minDistance = Infinity;
+        
+        for (const node of bathroomNodes) {
+          const p = findPath(fromId, node.id, accessible);
+          if (p && p.totalDistance < minDistance) {
+            minDistance = p.totalDistance;
+            path = p;
+            finalToId = node.id; // Resolve dinamicamente para o ID real do banheiro mais próximo
+          }
+        }
+      } else {
+        path = findPath(fromId, toId, accessible);
+      }
+
       setLoading(false);
 
       if (!path) {
@@ -244,7 +294,7 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
         onRouteChange(null);
       } else {
         setResult(path);
-        onRouteChange({ pathResult: path, fromId, toId, accessibleOnly: accessible });
+        onRouteChange({ pathResult: path, fromId, toId: finalToId, accessibleOnly: accessible });
       }
     }, 50);
   }, [fromId, toId, accessible, onRouteChange]);
@@ -267,7 +317,6 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
 
   return (
     <>
-      {/* Backdrop mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/40 backdrop-blur-sm z-3500 md:hidden animate-in fade-in duration-200"
@@ -276,7 +325,6 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
         />
       )}
 
-      {/* Drawer panel */}
       <aside
         role="dialog"
         aria-modal="true"
@@ -285,7 +333,6 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        {/* Header */}
         <div className="flex items-center gap-3 px-5 pt-6 pb-4 border-b border-borda shrink-0">
           <div className="w-9 h-9 rounded-xl bg-destaque/15 flex items-center justify-center shrink-0">
             <Navigation size={18} className="text-destaque" aria-hidden />
@@ -303,10 +350,7 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
           </button>
         </div>
 
-        {/* Content */}
         <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-5">
-
-          {/* From / To */}
           <div className="flex flex-col gap-3">
             <div>
               <label className="block text-[11px] font-semibold uppercase tracking-wider text-texto-auxiliar mb-1.5">
@@ -322,7 +366,6 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
               />
             </div>
 
-            {/* Arrow divider */}
             <div className="flex items-center gap-2">
               <div className="flex-1 h-px bg-borda" />
               <div className="w-7 h-7 rounded-full border border-borda bg-fundo-cartao flex items-center justify-center">
@@ -342,11 +385,11 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
                 excludeId={fromId}
                 icon={Navigation}
                 accentColor="#f06595"
+                isDestination={true} // Ativa a opção inteligente de Banheiro Mais Próximo
               />
             </div>
           </div>
 
-          {/* Accessibility toggle */}
           <label className="flex items-start gap-3 p-3.5 bg-fundo-cartao border border-borda hover:border-borda-hover rounded-xl cursor-pointer transition-colors duration-150 group">
             <div className="relative shrink-0 mt-0.5">
               <input
@@ -377,7 +420,6 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
             </div>
           </label>
 
-          {/* Error message */}
           {error && (
             <div
               role="alert"
@@ -388,7 +430,6 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
             </div>
           )}
 
-          {/* CTA button */}
           <button
             onClick={handleSearch}
             disabled={!fromId || !toId || loading}
@@ -408,14 +449,12 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
             )}
           </button>
 
-          {/* Result */}
           {result && (
             <div
               className="animate-in slide-in-from-bottom-2 fade-in duration-300"
               role="region"
               aria-label="Resultado da rota"
             >
-              {/* Summary card */}
               <div className="flex items-center gap-3 p-4 bg-fundo-cartao border border-borda rounded-xl mb-1">
                 <div className="w-9 h-9 rounded-xl bg-green-500/15 flex items-center justify-center shrink-0">
                   <Navigation size={16} className="text-green-400" aria-hidden />
@@ -432,10 +471,8 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
                 </div>
               </div>
 
-              {/* Steps */}
               <RouteSteps result={result} />
 
-              {/* Limpar */}
               <button
                 onClick={handleClear}
                 className="mt-4 w-full py-2.5 text-sm text-texto-auxiliar hover:text-texto-principal border border-borda hover:border-borda-hover rounded-xl transition-colors duration-150"
