@@ -14,8 +14,8 @@ export interface NavNode {
 export interface NavEdge {
   from: string;
   to: string;
-  weight?: number; // distância relativa (calculada automaticamente se omitida)
-  accessible?: boolean; // true = acessível para cadeirantes (rampas/elevadores)
+  weight?: number; // distância relativa
+  accessible?: boolean; // true = acessível para cadeirantes 
 }
 
 // NÓS DO GRAFO
@@ -23,6 +23,7 @@ export const NAV_NODES: NavNode[] = [
 
   // ── TÉRREO 
   // ── Corredores e Junções Principais (Térreo) ──
+  { id: 'T_ENTRY',              x: 34.25, y: 93.90, floor: 'terreo', type: 'room', label: 'Entrada' },
   { id: 'T_CORRIDOR_Oeste_1',   x: 21.83, y: 87.79, floor: 'terreo', type: 'corridor' },
   { id: 'T_CORRIDOR_Oeste_2',   x: 21.94, y: 69.20, floor: 'terreo', type: 'corridor' },
   { id: 'T_CORRIDOR_Central_1', x: 50.09, y: 87.57, floor: 'terreo', type: 'corridor' },
@@ -47,7 +48,7 @@ export const NAV_NODES: NavNode[] = [
   { id: 'T_JUNCTION_H',         x: 21.83, y: 76.80, floor: 'terreo', type: 'junction' },
   
   // ── Bloco A (Térreo) ──
-  { id: 'T_A_ENTRY',            x: 34.25, y: 93.90, floor: 'terreo', type: 'entrance' },
+  { id: 'T_A_ENTRY',            x: 49.98, y: 93.04, floor: 'terreo', type: 'room', label: 'Bloco 1'  },
   { id: 'T_CORRIDOR_A',         x: 42.81, y: 92.87, floor: 'terreo', type: 'corridor' },
   { id: 'T_JUNCTION_A_Escada',  x: 30.82, y: 93.56, floor: 'terreo', type: 'junction' },
   { id: 'T_A01',                x: 24.19, y: 92.53, floor: 'terreo', type: 'room', label: 'Ala Médica' },
@@ -59,7 +60,7 @@ export const NAV_NODES: NavNode[] = [
     connectsTo: [{ nodeId: 'S_A_Escada', floor: 'superior' }] },
 
   // ── Bloco B (Térreo) ──
-  { id: 'T_B_ENTRY',            x: 51.90, y: 76.80, floor: 'terreo', type: 'entrance' },
+  { id: 'T_B_ENTRY',            x: 51.90, y: 76.80, floor: 'terreo', type: 'room', label: 'Bloco 2' },
   { id: 'T_JUNCTION_B_Escada',  x: 69.78, y: 76.89, floor: 'terreo', type: 'junction' },
   { id: 'T_B01',                x: 53.08, y: 76.46, floor: 'terreo', type: 'room', label: 'Lab. Química' },
   { id: 'T_B02',                x: 58.54, y: 76.25, floor: 'terreo', type: 'room', label: 'Lab. Física' },
@@ -71,7 +72,7 @@ export const NAV_NODES: NavNode[] = [
     connectsTo: [{ nodeId: 'S_B_Escada', floor: 'superior' }] },
 
   // ── Bloco C (Térreo) ──
-  { id: 'T_C_ENTRY',            x: 47.95, y: 60.56, floor: 'terreo', type: 'entrance' },
+  { id: 'T_C_ENTRY',            x: 47.95, y: 60.56, floor: 'terreo', type: 'room', label: 'Bloco 3' },
   { id: 'T_JUNCTION_C_Escada',  x: 30.82, y: 60.65, floor: 'terreo', type: 'junction' },
   { id: 'T_JUNCTION_Rampa',     x: 50.73, y: 54.03, floor: 'terreo', type: 'junction' },
   { id: 'T_C01',                x: 25.26, y: 60.44, floor: 'terreo', type: 'room', label: 'Lab. Informática' },
@@ -91,7 +92,7 @@ export const NAV_NODES: NavNode[] = [
     connectsTo: [{ nodeId: 'S_Rampa', floor: 'superior' }] },
 
   // ── Bloco D (Térreo) ──
-  { id: 'T_D_ENTRY',            x: 51.69, y: 45.18, floor: 'terreo', type: 'entrance' },
+  { id: 'T_D_ENTRY',            x: 51.69, y: 45.18, floor: 'terreo', type: 'room', label: 'Bloco 4' },
   { id: 'T_JUNCTION_D_Escada',  x: 69.56, y: 45.69, floor: 'terreo', type: 'junction' },
   { id: 'T_D01',                x: 50.41, y: 40.14, floor: 'terreo', type: 'room', label: 'CEEL' },
   { id: 'T_D02',                x: 56.72, y: 44.75, floor: 'terreo', type: 'room', label: 'Lab. Inst. Elétricas' },
@@ -103,7 +104,7 @@ export const NAV_NODES: NavNode[] = [
     connectsTo: [{ nodeId: 'S_D_Escada', floor: 'superior' }, { nodeId: 'SUB_D_Escada', floor: 'subsolo' }] },
 
   // ── Bloco E (Térreo) ──
-  { id: 'T_E_ENTRY',            x: 83.15, y: 50.95, floor: 'terreo', type: 'entrance' },
+  { id: 'T_E_ENTRY',            x: 83.15, y: 50.95, floor: 'terreo', type: 'room', label: 'Bloco Arquitetura' },
   { id: 'T_JUNCTION_E_Salas',   x: 87.33, y: 59.11, floor: 'terreo', type: 'junction' },
   { id: 'T_E01',                x: 82.62, y: 57.40, floor: 'terreo', type: 'room', label: 'COED' },
   { id: 'T_E02',                x: 88.18, y: 57.83, floor: 'terreo', type: 'room', label: 'Ateliê de arquitetura' },
@@ -113,8 +114,8 @@ export const NAV_NODES: NavNode[] = [
     connectsTo: [{ nodeId: 'SUB_E_Escada', floor: 'subsolo' }] },
 
   // ── Bloco F e G (Térreo) ──
-  { id: 'T_F_ENTRY',            x: 60.89, y: 19.75, floor: 'terreo', type: 'entrance' },
-  { id: 'T_G_ENTRY',            x: 50.30, y: 18.47, floor: 'terreo', type: 'entrance' },
+  { id: 'T_F_ENTRY',            x: 60.89, y: 19.75, floor: 'terreo', type: 'room', label: 'Coinf' },
+  { id: 'T_G_ENTRY',            x: 50.30, y: 18.47, floor: 'terreo', type: 'room', label: 'Vivência' },
   { id: 'T_CORRIDOR_FG',        x: 55.65, y: 10.82, floor: 'terreo', type: 'corridor' },
   { id: 'T_JUNCTION_FG',        x: 50.09, y: 32.40, floor: 'terreo', type: 'junction' },
   { id: 'T_JUNCTION_GF',        x: 58.33, y: 15.73, floor: 'terreo', type: 'junction' },
@@ -140,7 +141,7 @@ export const NAV_NODES: NavNode[] = [
     connectsTo: [{ nodeId: 'SUB_F_Escada', floor: 'subsolo' }] },
 
   // ── Bloco H e Containers (Térreo) ──
-  { id: 'T_H_ENTRY',            x: 20.44, y: 76.80, floor: 'terreo', type: 'entrance' },
+  { id: 'T_H_ENTRY',            x: 20.44, y: 76.80, floor: 'terreo', type: 'room', label: 'Bloco Auditório' },
   { id: 'T_Entrada_W',          x: 19.91, y: 98.30, floor: 'terreo', type: 'entrance' },
   { id: 'T_JUNCTION_Containers',x: 13.59, y: 98.30, floor: 'terreo', type: 'junction' },
   { id: 'T_H01',                x: 17.98, y: 76.46, floor: 'terreo', type: 'room', label: 'Auditório' },
@@ -179,7 +180,7 @@ export const NAV_NODES: NavNode[] = [
   { id: 'S_JUNCTION_F',         x: 68.92, y: 20.44, floor: 'superior', type: 'junction' },
 
   // ── Bloco A (Superior) ──
-  { id: 'S_A_ENTRY',            x: 56.08, y: 94.11, floor: 'superior', type: 'entrance' },
+  { id: 'S_A_ENTRY',            x: 56.08, y: 94.11, floor: 'superior', type: 'room', label: 'Bloco 1 - Superior' },
   { id: 'S_JUNCTION_A_Escada',  x: 36.82, y: 93.94, floor: 'superior', type: 'junction' },
   { id: 'S_A06',                x: 30.29, y: 93.51, floor: 'superior', type: 'room', label: 'Direção Geral' },
   { id: 'S_A07',                x: 32.75, y: 93.94, floor: 'superior', type: 'room', label: 'Gabinete' },
@@ -192,7 +193,7 @@ export const NAV_NODES: NavNode[] = [
     connectsTo: [{ nodeId: 'T_A_Escada', floor: 'terreo' }] },
 
   // ── Bloco B (Superior) ──
-  { id: 'S_B_ENTRY',            x: 58.22, y: 77.44, floor: 'superior', type: 'entrance' },
+  { id: 'S_B_ENTRY',            x: 58.22, y: 77.44, floor: 'superior', type: 'room', label: 'Bloco 2 - Superior' },
   { id: 'S_JUNCTION_B_Escada',  x: 76.20, y: 77.49, floor: 'superior', type: 'junction' },
   { id: 'S_B07',                x: 59.61, y: 77.57, floor: 'superior', type: 'room', label: 'Sala de Aula 1' },
   { id: 'S_B08',                x: 62.93, y: 77.79, floor: 'superior', type: 'room', label: 'Sala de Aula 2' },
@@ -206,7 +207,7 @@ export const NAV_NODES: NavNode[] = [
     connectsTo: [{ nodeId: 'T_B_Escada', floor: 'terreo' }] },
 
   // ── Bloco C (Superior) ──
-  { id: 'S_C_ENTRY',            x: 55.44, y: 61.63, floor: 'superior', type: 'entrance' },
+  { id: 'S_C_ENTRY',            x: 55.44, y: 61.63, floor: 'superior', type: 'room', label: 'Bloco 3 - Superior' },
   { id: 'S_JUNCTION_C_Escada',  x: 36.82, y: 61.03, floor: 'superior', type: 'junction' },
   { id: 'S_C10',                x: 33.71, y: 61.25, floor: 'superior', type: 'room', label: 'Mini Auditório' },
   { id: 'S_C11',                x: 35.21, y: 61.46, floor: 'superior', type: 'room', label: 'Lab. Física Moderna' },
@@ -222,7 +223,7 @@ export const NAV_NODES: NavNode[] = [
     connectsTo: [{ nodeId: 'T_Rampa', floor: 'terreo' }] },
 
   // ── Bloco D (Superior) ──
-  { id: 'S_D_ENTRY',            x: 57.68, y: 45.82, floor: 'superior', type: 'entrance' },
+  { id: 'S_D_ENTRY',            x: 57.68, y: 45.82, floor: 'superior', type: 'room', label: 'Bloco 4 - Superior' },
   { id: 'S_JUNCTION_D_Escada',  x: 75.88, y: 45.86, floor: 'superior', type: 'junction' },
   { id: 'S_D07',                x: 58.22, y: 46.08, floor: 'superior', type: 'room', label: 'Sala Prof. EMEC' },
   { id: 'S_D08',                x: 63.04, y: 46.29, floor: 'superior', type: 'room', label: 'Lab. Ensinagens' },
@@ -235,7 +236,7 @@ export const NAV_NODES: NavNode[] = [
     connectsTo: [{ nodeId: 'T_D_Escada', floor: 'terreo' }, { nodeId: 'SUB_D_Escada', floor: 'subsolo' }] },
 
   // ── Bloco F (Superior) ──
-  { id: 'S_F_ENTRY',            x: 70.53, y: 16.97, floor: 'superior', type: 'entrance' },
+  { id: 'S_F_ENTRY',            x: 70.53, y: 16.97, floor: 'superior', type: 'room', label: 'Coinf - Superior' },
   { id: 'S_F08',                x: 70.95, y: 13.38, floor: 'superior', type: 'room', label: 'Lab. 03' },
   { id: 'S_F09',                x: 71.60, y: 12.53, floor: 'superior', type: 'room', label: 'Lab. 04' },
   { id: 'S_F10',                x: 71.81, y: 12.96, floor: 'superior', type: 'room', label: 'Lab. 06' },
@@ -247,11 +248,11 @@ export const NAV_NODES: NavNode[] = [
     connectsTo: [{ nodeId: 'T_F_Escada', floor: 'terreo' }] },
 
   // ── Bloco G (Superior) ──
-  { id: 'S_G_ENTRY',            x: 56.51, y: 26.38, floor: 'superior', type: 'entrance' },
+  { id: 'S_G_ENTRY',            x: 56.51, y: 26.38, floor: 'superior', type: 'room', label: 'Vivência - Superior' },
   { id: 'S_G07',                x: 56.51, y: 22.14, floor: 'superior', type: 'room', label: 'Área de Convívio' },
 
   // ── Bloco H (Superior) ──
-  { id: 'S_H_ENTRY',            x: 28.15, y: 75.52, floor: 'superior', type: 'entrance' },
+  { id: 'S_H_ENTRY',            x: 28.15, y: 75.52, floor: 'superior', type: 'room', label: 'Bloco Auditório - Superior' },
   { id: 'S_H06',                x: 26.65, y: 74.50, floor: 'superior', type: 'room', label: 'Comunicação' },
   { id: 'S_H07',                x: 26.65, y: 76.63, floor: 'superior', type: 'room', label: 'Motoristas' },
 
@@ -334,8 +335,8 @@ export const NAV_EDGES: NavEdge[] = [
   { from: 'T_CORRIDOR_Leste_3',   to: 'T_JUNCTION_D_E' },
 
   // ── Conexões Transversais (Oeste -> Leste) ──
-  { from: 'T_JUNCTION_A_W',       to: 'T_A_ENTRY' },
-  { from: 'T_A_ENTRY',            to: 'T_CORRIDOR_A' },
+  { from: 'T_JUNCTION_A_W',       to: 'T_ENTRY' },
+  { from: 'T_ENTRY',              to: 'T_CORRIDOR_A' },
   { from: 'T_CORRIDOR_A',         to: 'T_JUNCTION_A_L' },
   
   { from: 'T_JUNCTION_B_W',       to: 'T_B_ENTRY' },
@@ -347,11 +348,15 @@ export const NAV_EDGES: NavEdge[] = [
   { from: 'T_JUNCTION_D_W',       to: 'T_D_ENTRY' },
   { from: 'T_D_ENTRY',            to: 'T_JUNCTION_D_E' },
 
+  // Entrada
+  
+  { from: 'T_ENTRY',              to: 'T_JUNCTION_A_Escada' },
+  { from: 'T_ENTRY',              to: 'T_A05' },
+
   // ── Bloco A (Térreo) ──
-  { from: 'T_A_ENTRY',            to: 'T_JUNCTION_A_Escada' },
+  { from: 'T_A_ENTRY',            to: 'T_CORRIDOR_A' },
   { from: 'T_JUNCTION_A_Escada',  to: 'T_A_Escada' },
   { from: 'T_JUNCTION_A_Escada',  to: 'T_A04' },
-  { from: 'T_A_ENTRY',            to: 'T_A05' },
   { from: 'T_A04',                to: 'T_A03' },
   { from: 'T_A03',                to: 'T_A02' },
   { from: 'T_A02',                to: 'T_A01' },
@@ -588,7 +593,7 @@ export const NAV_EDGES: NavEdge[] = [
   // Escada Bloco D (Liga os 3 andares)
   { from: 'T_D_Escada',     to: 'S_D_Escada',   weight: 15 },
   { from: 'T_D_Escada',     to: 'SUB_D_Escada', weight: 15 },
-  { from: 'S_D_Escada',     to: 'SUB_D_Escada', weight: 30 }, // Pular 2 andares direto (caso necessário)
+  { from: 'S_D_Escada',     to: 'SUB_D_Escada', weight: 30 }, 
   
   { from: 'T_E_Escada',     to: 'SUB_E_Escada', weight: 15 }, 
   { from: 'T_F_Escada',     to: 'S_F_Escada',   weight: 15 },
