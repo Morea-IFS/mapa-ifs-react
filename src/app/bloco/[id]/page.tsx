@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { getBlocoById } from '@/data/blocos';
 import { ArrowLeft } from 'lucide-react';
+import { Zap, ExternalLink } from 'lucide-react';
 
 export default function BlocoPage() {
   const params = useParams();
@@ -77,6 +78,31 @@ export default function BlocoPage() {
           </div>
         </motion.div>
       </div>
+
+      {bloco.energyDashboardId && (
+        <a
+          href={`https://morea-ifs.org/device-fullscreen/${bloco.energyDashboardId}/`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between p-4 my-2 bg-fundo-cartao border border-borda hover:border-yellow-500/50 rounded-xl transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+          aria-label={`Ver painel de consumo elétrico do ${bloco.name}`}
+        >
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-lg bg-yellow-500/15 flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110">
+              <Zap size={20} className="text-yellow-500 fill-yellow-500/20" aria-hidden="true" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-texto-principal">Consumo Elétrico</h3>
+              <p className="text-[11px] text-texto-auxiliar mt-0.5">
+                Acompanhe o painel em tempo real
+              </p>
+            </div>
+          </div>
+          <div className="w-8 h-8 flex items-center justify-center rounded-full bg-fundo-principal group-hover:bg-yellow-500/10 transition-colors duration-200">
+            <ExternalLink size={14} className="text-texto-auxiliar group-hover:text-yellow-500" aria-hidden="true" />
+          </div>
+        </a>
+      )}
 
       {/* Floors */}
       <div className="flex flex-col gap-6 pb-16" role="region" aria-label={`Plantas do ${bloco.name}`}>

@@ -585,6 +585,7 @@ export const NAV_EDGES: NavEdge[] = [
   { from: 'SUB_JUNCTION_D',       to: 'SUB_CORRIDOR' },
   { from: 'SUB_CORRIDOR',         to: 'SUB_JUNCTION_E' },
   { from: 'SUB_JUNCTION_E',       to: 'SUB_E05' },
+  { from: 'SUB_JUNCTION_E',       to: 'SUB_E06' },
   { from: 'SUB_JUNCTION_E',       to: 'SUB_E_Escada' },
   { from: 'SUB_E06',              to: 'SUB_JUNCTION_E_Salas' },
   { from: 'SUB_E06',              to: 'SUB_E07' },
