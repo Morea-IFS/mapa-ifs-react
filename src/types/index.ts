@@ -21,12 +21,14 @@ export interface BlocoData {
   name: string;
   description: string;
   floors: Floor[];
-  /** Positions on the campus map as percentage [x%, y%] from top-left for each floor */
+  /** Posição no mapa [x%, y%] */
   mapPosition: {
     terreo?: MapCoordinates;
     superior?: MapCoordinates;
     subsolo?: MapCoordinates;
   };
-  /** Color for the marker on the map */
+  /** Cor do marcador no mapa */
   color?: string;
+  /** Id do dashboard de energia */
+  energyDashboardId?: number;
 }

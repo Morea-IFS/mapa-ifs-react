@@ -62,6 +62,7 @@ export const blocos: BlocoData[] = [
   {
     id: 'B',
     name: 'Bloco B',
+    energyDashboardId: 6,
     description:
       'Bloco B — abriga as Salas de 1 a 7, Salas de Desenhos e Projetos, Laboratórios de Natureza, Laboratório de Desenho Técnico em CAD.',
     mapPosition: { 
