@@ -5,11 +5,13 @@ import { MapContainer, ImageOverlay, Marker, Popup, useMap } from 'react-leaflet
 import L from 'leaflet';
 import Link from 'next/link';
 import { blocos } from '@/data/blocos';
+import RouteOverlay from '@/components/RouteOverlay';
 import mapaTerreo from '@/assets/mapa_geral.png';
 import mapaSuperior from '@/assets/mapa_geral_superior.png';
 import mapaSubsolo from '@/assets/mapa_geral_subsolo.png';
 import 'leaflet/dist/leaflet.css';
 import type { FloorLevel } from './FloorSwitcher';
+import type { RouteResult } from './RouteDrawer';
 
 // Map image dimensions
 const MAP_WIDTH = 1000;
@@ -19,7 +21,7 @@ const bounds: L.LatLngBoundsExpression = [[0, 0], [MAP_HEIGHT, MAP_WIDTH]];
 // Define which blocks exist on each floor
 const FLOOR_BLOCKS: Record<FloorLevel, Set<string>> = {
   terreo: new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']),
-  superior: new Set(['A', 'B', 'C', 'D', 'F', 'G', 'H']), // all except E
+  superior: new Set(['A', 'B', 'C', 'D', 'F', 'G', 'H']),
   subsolo: new Set(['D', 'E', 'F']),
 };
 
@@ -54,21 +56,26 @@ function createMarkerIcon(color: string, label: string): L.DivIcon {
 
 interface CampusMapProps {
   floor?: FloorLevel;
+  routeResult?: RouteResult | null;
 }
 
-export default function CampusMap({ floor = 'terreo' }: CampusMapProps) {
+export default function CampusMap({ floor = 'terreo', routeResult }: CampusMapProps) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayedFloor, setDisplayedFloor] = useState<FloorLevel>(floor);
 
   // Animate floor transition
   useEffect(() => {
     if (floor !== displayedFloor) {
-      setIsTransitioning(true);
-      const timer = setTimeout(() => {
+      const startTimer = setTimeout(() => setIsTransitioning(true), 0);
+      const endTimer = setTimeout(() => {
         setDisplayedFloor(floor);
         setIsTransitioning(false);
       }, 200);
-      return () => clearTimeout(timer);
+
+      return () => {
+        clearTimeout(startTimer);
+        clearTimeout(endTimer);
+      };
     }
   }, [floor, displayedFloor]);
 
@@ -79,21 +86,23 @@ export default function CampusMap({ floor = 'terreo' }: CampusMapProps) {
 
   const mapImage = MAP_IMAGES[displayedFloor];
 
+  // When a route is active, dim block markers slightly so route stands out
+  const markerOpacity = routeResult ? 0.45 : 1;
+
   return (
-    <div 
+    <div
       className="w-full h-[70vh] min-h-100 max-h-150 md:h-125 md:min-h-100 md:max-h-137.5 rounded-2xl overflow-hidden border border-borda hover:border-borda-hover shadow-lg hover:shadow-2xl relative transition-all duration-300 campus-map-wrapper"
       role="application"
       aria-label={`Mapa interativo do campus — ${displayedFloor === 'terreo' ? 'Térreo' : displayedFloor === 'superior' ? 'Andar Superior' : 'Subsolo'}`}
     >
-      
       {/* Transition overlay */}
-      <div 
-        className={`absolute inset-0 bg-fundo-principal/60 z-[1000] pointer-events-none transition-opacity duration-200 ${
+      <div
+        className={`absolute inset-0 bg-fundo-principal/60 z-1000 pointer-events-none transition-opacity duration-200 ${
           isTransitioning ? 'opacity-100' : 'opacity-0'
         }`}
       />
 
-      {/* Bloco Invisível para Leitores de Tela (Acessibilidade) */}
+      {/* Bloco Invisível para Leitores de Tela */}
       <div className="sr-only" aria-live="polite">
         <h2>Lista de Blocos e Navegação Alternativa</h2>
         <ul role="list">
@@ -105,6 +114,14 @@ export default function CampusMap({ floor = 'terreo' }: CampusMapProps) {
             </li>
           ))}
         </ul>
+        {routeResult && (
+          <div aria-live="assertive">
+            Rota traçada com {routeResult.pathResult.path.length} pontos.{' '}
+            {routeResult.pathResult.floorChanges.length > 0
+              ? `Inclui ${routeResult.pathResult.floorChanges.length} troca(s) de andar.`
+              : 'Rota no mesmo andar.'}
+          </div>
+        )}
       </div>
 
       <MapContainer
@@ -125,10 +142,11 @@ export default function CampusMap({ floor = 'terreo' }: CampusMapProps) {
         <FitBounds />
         <ImageOverlay url={mapImage.src} bounds={bounds} />
 
+        {/* Block markers — dimmed when route is active */}
         {visibleBlocos.map((bloco) => {
           const pos = bloco.mapPosition[displayedFloor];
           if (!pos) return null;
-          
+
           const lat = MAP_HEIGHT * (1 - pos.y / 100);
           const lng = MAP_WIDTH * (pos.x / 100);
           const color = bloco.color || 'var(--color-destaque)';
@@ -138,6 +156,7 @@ export default function CampusMap({ floor = 'terreo' }: CampusMapProps) {
               key={`${bloco.id}-${displayedFloor}`}
               position={[lat, lng]}
               icon={createMarkerIcon(color, bloco.name)}
+              opacity={markerOpacity}
             >
               <Popup className="campus-popup">
                 <div className="p-4">
@@ -173,6 +192,16 @@ export default function CampusMap({ floor = 'terreo' }: CampusMapProps) {
             </Marker>
           );
         })}
+
+        {/* Route overlay — rendered on top of everything */}
+        {routeResult && (
+          <RouteOverlay
+            pathResult={routeResult.pathResult}
+            fromId={routeResult.fromId}
+            toId={routeResult.toId}
+            currentFloor={displayedFloor}
+          />
+        )}
       </MapContainer>
     </div>
   );
