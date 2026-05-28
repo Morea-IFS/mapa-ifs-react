@@ -236,12 +236,6 @@ body {
   color: var(--destaque) !important;
 }
 
-/* =========================================================
-   ROUTE OVERLAY — adicionar ao globals.css
-   Copie este bloco para dentro do seu globals.css existente,
-   após os estilos do Leaflet Map.
-   ========================================================= */
-
 /* ── Linha pontilhada animada ── */
 .route-animated-dash {
   stroke-dashoffset: 0;

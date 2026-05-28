@@ -84,7 +84,7 @@ export default function CalibrePage() {
     const id = nodeId.trim() || `${floor.toUpperCase().slice(0,1)}_${nodeType.toUpperCase()}_${Date.now()}`;
 
     setNodes((prev) => {
-      // Replace if same id
+      // remove um nó com o mesmo ID se já existir, para evitar duplicatas
       const filtered = prev.filter((n) => n.id !== id);
       return [...filtered, { id, x, y, floor, type: nodeType, label: nodeLabel.trim() }];
     });
@@ -106,7 +106,7 @@ export default function CalibrePage() {
     if (selectedNode?.id === id) setSelectedNode(null);
   };
 
-  // Generate TypeScript output for the placed nodes
+  // Gera o output TypeScript para copiar — um array de objetos com as propriedades necessárias
   const generateTS = () => {
     if (nodes.length === 0) return '// Nenhum nó colocado ainda.';
     return nodes.map((n) =>

@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import Script from 'next/script';
 
-// Declaramos a estrutura exata para o TypeScript, substituindo o "any"
-// e garantindo a tipagem segura do construtor Widget.
 declare global {
   interface Window {
     VLibras?: {

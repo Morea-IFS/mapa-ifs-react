@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { X, Navigation, MapPin, ArrowRight, AlertCircle, Accessibility, ChevronDown, Search } from 'lucide-react';
-import { findPath, ROOM_OPTIONS, NODE_MAP, type RoomOption, type PathResult, type FloorLevel } from '@/data/navigationGraph';
+import { findPath, ROOM_OPTIONS, NODE_MAP, type PathResult, type FloorLevel } from '@/data/navigationGraph';
 
 interface RouteDrawerProps {
   isOpen: boolean;
@@ -17,7 +17,7 @@ export interface RouteResult {
   accessibleOnly: boolean;
 }
 
-// ── Combobox com busca ──────────────────────────────────────
+// ── Combobox com busca 
 function RoomCombobox({
   value,
   onChange,
@@ -385,7 +385,7 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
                 excludeId={fromId}
                 icon={Navigation}
                 accentColor="#f06595"
-                isDestination={true} // Ativa a opção inteligente de Banheiro Mais Próximo
+                isDestination={true} 
               />
             </div>
           </div>

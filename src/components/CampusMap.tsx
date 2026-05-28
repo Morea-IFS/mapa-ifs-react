@@ -13,12 +13,12 @@ import 'leaflet/dist/leaflet.css';
 import type { FloorLevel } from './FloorSwitcher';
 import type { RouteResult } from './RouteDrawer';
 
-// Map image dimensions
+// Define as dimensões do mapa e os limites para o Leaflet
 const MAP_WIDTH = 1000;
 const MAP_HEIGHT = 600;
 const bounds: L.LatLngBoundsExpression = [[0, 0], [MAP_HEIGHT, MAP_WIDTH]];
 
-// Define which blocks exist on each floor
+// Define quais blocos aparecem em cada andar para otimizar a renderização
 const FLOOR_BLOCKS: Record<FloorLevel, Set<string>> = {
   terreo: new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']),
   superior: new Set(['A', 'B', 'C', 'D', 'F', 'G', 'H']),
@@ -63,7 +63,7 @@ export default function CampusMap({ floor = 'terreo', routeResult }: CampusMapPr
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayedFloor, setDisplayedFloor] = useState<FloorLevel>(floor);
 
-  // Animate floor transition
+  // Gerencia a transição suave entre os andares, evitando mudanças bruscas no mapa
   useEffect(() => {
     if (floor !== displayedFloor) {
       const startTimer = setTimeout(() => setIsTransitioning(true), 0);
@@ -86,7 +86,7 @@ export default function CampusMap({ floor = 'terreo', routeResult }: CampusMapPr
 
   const mapImage = MAP_IMAGES[displayedFloor];
 
-  // When a route is active, dim block markers slightly so route stands out
+  // Diminuir a opacidade dos marcadores quando uma rota estiver ativa para destacar o caminho
   const markerOpacity = routeResult ? 0.45 : 1;
 
   return (
@@ -142,7 +142,7 @@ export default function CampusMap({ floor = 'terreo', routeResult }: CampusMapPr
         <FitBounds />
         <ImageOverlay url={mapImage.src} bounds={bounds} />
 
-        {/* Block markers — dimmed when route is active */}
+        {/* Marcadores de bloco — escurecidos quando uma rota estiver ativa */}
         {visibleBlocos.map((bloco) => {
           const pos = bloco.mapPosition[displayedFloor];
           if (!pos) return null;
@@ -193,7 +193,7 @@ export default function CampusMap({ floor = 'terreo', routeResult }: CampusMapPr
           );
         })}
 
-        {/* Route overlay — rendered on top of everything */}
+        {/* Overlay de rota — renderizado por cima de tudo */}
         {routeResult && (
           <RouteOverlay
             pathResult={routeResult.pathResult}
