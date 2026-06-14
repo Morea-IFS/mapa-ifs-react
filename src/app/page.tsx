@@ -43,7 +43,7 @@ export default function MapaGeralPage() {
           MERO
         </h1>
         <p className="text-[0.95rem] text-texto-secundario">
-          Mapa de Espaços e Representação de Orientação.
+          Mapa de Espaços, Recursos e Orientação.
         </p>
         <p className="text-[0.95rem] text-texto-secundario">
           Um mapa do campus para facilitar sua navegação e localização de salas, blocos e outros pontos de interesse.
