@@ -728,7 +728,7 @@ export interface RoomOption {
   id: string;
   label: string;
   floor: FloorLevel;
-  blockId: string;
+  blockId?: string;
 }
 
 export const ROOM_OPTIONS: RoomOption[] = NAV_NODES
@@ -739,4 +739,10 @@ export const ROOM_OPTIONS: RoomOption[] = NAV_NODES
     floor: n.floor,
     blockId: n.id.split('_')[1],
   }))
-  .sort((a, b) => a.label.localeCompare(b.label, 'pt-BR'));
+  .sort((a, b) => {
+    const isEntradaA = a.id === 'T_ENTRY' || a.label.toLowerCase() === 'entrada';
+    const isEntradaB = b.id === 'T_ENTRY' || b.label.toLowerCase() === 'entrada';
+    if (isEntradaA) return -1;
+    if (isEntradaB) return 1;
+    return a.label.localeCompare(b.label, 'pt-BR');
+  });

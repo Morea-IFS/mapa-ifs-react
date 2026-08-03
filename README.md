@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MERO — Mapa de Espaços, Recursos e Orientação
 
-## Getting Started
+![Next.js](https://img.shields.io/badge/Next.js-16.2.4-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-19.2.4-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38BDF8?style=flat-square&logo=tailwindcss)
+![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-199900?style=flat-square&logo=leaflet&logoColor=white)
 
-First, run the development server:
+> **MERO** é uma aplicação web interativa desenvolvida para o **Instituto Federal de Sergipe (IFS)** no âmbito do **Projeto Morea**. O objetivo é facilitar a localização espacial, navegação guiada e acessibilidade para alunos, professores, servidores e visitantes no campus.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 📌 Visão Geral do Projeto
+
+Navegar em grandes campi educacionais pode ser um desafio. O MERO resolve esse problema oferecendo um **mapa interativo de múltiplos andares** combinado com um **sistema de roteamento dinâmico inteligente (A*)**, permitindo que qualquer pessoa trace a rota mais rápida até uma sala, laboratório, setor administrativo ou banheiro no campus.
+
+O projeto foi construído focando em **experiência do usuário (UX)**, **desempenho**, **design moderno** e **acessibilidade universal**.
+
+---
+
+## ✨ Principais Funcionalidades
+
+- **🗺️ Mapeamento Interativo Multi-Andar**: Visualização das plantas baixas do campus divididas por andares (**Térreo**, **Andar Superior** e **Subsolo**), integradas via Leaflet (`L.CRS.Simple`).
+- **🧭 Motor de Roteamento Inteligente (Algoritmo A*)**:
+  - Traça o caminho mais curto entre qualquer sala de origem e destino no campus.
+  - Suporta transição suave entre andares por escadas e rampas.
+  - **Desenho da Rota Animada**: Exibe linhas pontilhadas animadas, setas direcionais do sentido de deslocamento e marcadores de transição.
+- **🚗 Destino Inteligente ("Banheiro Mais Próximo")**: Ao selecionar o destino virtual "Banheiro", o sistema calcula dinamicamente qual o sanitário mais próximo a partir da localização atual.
+- **♿ Modo Baixa Mobilidade / Acessibilidade**: Opção que reconfigura o grafo de navegação em tempo real, desconsiderando escadas e priorizando rampas de acessibilidade para cadeirantes ou pessoas com restrições de mobilidade.
+- **🤟 Suporte a Libras (VLibras)**: Widget integrado para tradução em tempo real de conteúdos para a Língua Brasileira de Sinais.
+- **⚡ Monitoramento Energético (Projeto Morea)**: Integração com painéis IoT em tempo real para acompanhamento do consumo elétrico dos blocos do IFS.
+- **📱 Responsivo & Dark Mode**: Interface otimizada para dispositivos móveis e desktops, com alternância de temas claro/escuro.
+- **🛠️ Ferramenta de Calibração Visual (`/calibrar`)**: Interface para desenvolvedores marcarem e exportarem rapidamente as coordenadas percentuais `(x%, y%)` dos nós do mapa.
+
+---
+
+## ⚙️ Como Funciona o Sistema de Navegação
+
+A navegação no MERO é baseada em uma estrutura de **Grafo Espacial** definida em `src/data/navigationGraph.ts`:
+
+1. **Nós (`NAV_NODES`)**: Representam pontos de interesse no mapa com coordenadas percentuais `(x%, y%)`, andar (`floor`) e tipo (`room`, `corridor`, `junction`, `stairs`, `ramp`, `bathroom`).
+2. **Arestas (`NAV_EDGES`)**: Representam as conexões físicas trafegáveis entre os nós. Arestas que envolvem escadas são marcadas e desativadas automaticamente quando a opção **Baixa Mobilidade** está ativa.
+3. **Algoritmo A* (A-Star)**: Quando o usuário seleciona origem e destino, o algoritmo avalia as distâncias euclidianas e pesos de transição para determinar a rota ideal e gerar as instruções passo a passo.
+
+```
+[ Origem (Sala) ] ── (Corredor) ──> [ Junção ] ── (Escada / Rampa) ──> [ Andar Superior ] ──> [ Destino ]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Tecnologias Utilizadas
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Core**: Next.js 16 (App Router) & React 19
+- **Linguagem**: TypeScript 5
+- **Mapeamento**: Leaflet 1.9.4 + `react-leaflet` 5
+- **Estilização**: Tailwind CSS v4 + Vanilla CSS Variables
+- **Animações**: Framer Motion
+- **Ícones**: Lucide React
+- **Acessibilidade**: VLibras Widget
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📁 Estrutura do Projeto
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+mapa-ifs-react/
+├── src/
+│   ├── app/
+│   │   ├── bloco/[id]/      # Página detalhada da planta e salas de cada bloco
+│   │   ├── calibrar/        # Ferramenta dev para cadastro de pontos no mapa
+│   │   ├── globals.css      # Estilos globais, temas e animações CSS da rota
+│   │   ├── layout.tsx       # Layout base (Sidebar, ThemeProvider, VLibras)
+│   │   └── page.tsx         # Página inicial com o Mapa Geral e Roteador
+│   ├── assets/              # Plantas baixas (Imagens PNG dos andares)
+│   ├── components/
+│   │   ├── CampusMap.tsx    # Componente Leaflet do mapa interativo
+│   │   ├── FloorSwitcher.tsx# Seletor de andares (Térreo/Superior/Subsolo)
+│   │   ├── RouteDrawer.tsx  # Painel de busca e seleção de origem/destino
+│   │   ├── RouteOverlay.tsx # Desenho SVG/Polyline da rota animada
+│   │   ├── SideBar.tsx      # Barra de navegação lateral
+│   │   └── VLibrasWidget.tsx# Componente de Libras
+│   ├── data/
+│   │   ├── blocos.ts          # Cadastro de blocos, salas e informações
+│   │   └── navigationGraph.ts # Grafo espacial e algoritmo A*
+│   └── types/               # Definições de tipos TypeScript
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🔧 Como Executar o Projeto Localmente
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Pré-requisitos
+- **Node.js** 18.x ou superior
+- **npm**, **yarn**, **pnpm** ou **bun**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Passo a passo
+
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/Morea-IFS/mapa-ifs-react.git
+   cd mapa-ifs-react
+   ```
+
+2. **Instale as dependências:**
+   ```bash
+   npm install
+   ```
+
+3. **Inicie o servidor de desenvolvimento:**
+   ```bash
+   npm run dev
+   ```
+
+4. **Acesse no navegador:**
+   Abra [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 📐 Adicionando ou Ajustando Rotas (`/calibrar`)
+
+Para adicionar novos pontos ou ajustar conexões no mapa:
+
+1. Acesse `http://localhost:3000/calibrar` no ambiente de desenvolvimento.
+2. Selecione o andar e o tipo de nó (`Sala`, `Corredor`, `Junção`, `Escada`, etc.).
+3. Clique sobre o mapa para posicionar os pontos e obter as coordenadas exatas `(x%, y%)`.
+4. Copie o trecho de código TypeScript gerado e cole em `src/data/navigationGraph.ts`.
+
+---
+
+## 📄 Licença e Créditos
+
+Desenvolvido para o **Instituto Federal de Sergipe (IFS)** — **Projeto Morea**.

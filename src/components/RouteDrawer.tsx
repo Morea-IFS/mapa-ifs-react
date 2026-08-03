@@ -42,13 +42,23 @@ function RoomCombobox({
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
     
-    // Injeta a opção genérica inteligente no topo se for o campo de destino
-    const baseOptions = isDestination
-      ? [
-          { id: 'banheiro', label: 'Banheiro (Mais Próximo)', floor: 'terreo' as FloorLevel },
-          ...ROOM_OPTIONS,
-        ]
-      : ROOM_OPTIONS;
+    // Assegura que 'Entrada' seja sempre a primeira opção para Origem e Destino
+    const entradaOption = ROOM_OPTIONS.find((r) => r.id === 'T_ENTRY' || r.label.toLowerCase() === 'entrada');
+    const otherOptions = ROOM_OPTIONS.filter((r) => r.id !== 'T_ENTRY' && r.label.toLowerCase() !== 'entrada');
+
+    let baseOptions = ROOM_OPTIONS;
+    if (isDestination) {
+      baseOptions = [
+        ...(entradaOption ? [entradaOption] : []),
+        { id: 'banheiro', label: 'Banheiro (Mais Próximo)', floor: 'terreo' as FloorLevel, blockId: 'auto' },
+        ...otherOptions,
+      ];
+    } else {
+      baseOptions = [
+        ...(entradaOption ? [entradaOption] : []),
+        ...otherOptions,
+      ];
+    }
 
     return baseOptions.filter(
       (r) =>
@@ -59,7 +69,7 @@ function RoomCombobox({
 
   // Procura o selecionado considerando a opção virtual também
   const selected = value === 'banheiro' 
-    ? { id: 'banheiro', label: 'Banheiro (Mais Próximo)', floor: 'terreo' as FloorLevel }
+    ? { id: 'banheiro', label: 'Banheiro (Mais Próximo)', floor: 'terreo' as FloorLevel, blockId: 'auto' }
     : ROOM_OPTIONS.find((r) => r.id === value);
 
   useEffect(() => {
