@@ -41,14 +41,14 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
     if (nodesOnFloor.length < 2) {
       // CASO ESPECIAL: Rota sem pontos suficientes neste andar (ex: transição direta entre andares)
       const transitionNode = pathResult.path.find(
-        (n) => (n.type === 'stairs' || n.type === 'ramp') && n.floor !== currentFloor
+        (n) => (n.type === 'escada' || n.type === 'rampa') && n.floor !== currentFloor
       );
       if (transitionNode) {
         const pos = toLatLng(transitionNode.x, transitionNode.y);
         const icon = L.divIcon({
           className: 'route-transition-wrapper',
           html: `<div class="route-transition-marker" aria-label="Troca de andar aqui">
-            <span>${transitionNode.type === 'ramp' ? '♿' : '🪜'}</span>
+            <span>${transitionNode.type === 'rampa' ? '♿' : '🪜'}</span>
           </div>`,
           iconSize: [36, 36],
           iconAnchor: [18, 18],
@@ -135,13 +135,13 @@ export default function RouteOverlay({ pathResult, fromId, toId, currentFloor }:
 
     // ── Marcadores de transição entre andares ──
     nodesOnFloor
-      .filter((n) => n.type === 'stairs' || n.type === 'ramp')
+      .filter((n) => n.type === 'escada' || n.type === 'rampa')
       .forEach((node) => {
         const pos = toLatLng(node.x, node.y);
         const icon = L.divIcon({
           className: 'route-waypoint-wrapper',
           html: `<div class="route-waypoint route-waypoint--transition" aria-label="${node.label ?? 'Transição de andar'}">
-            <span class="route-waypoint-emoji">${node.type === 'ramp' ? '♿' : '🪜'}</span>
+            <span class="route-waypoint-emoji">${node.type === 'rampa' ? '♿' : '🪜'}</span>
           </div>`,
           iconSize: [32, 32],
           iconAnchor: [16, 16],

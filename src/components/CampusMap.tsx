@@ -95,7 +95,7 @@ export default function CampusMap({ floor = 'terreo', routeResult }: CampusMapPr
       role="application"
       aria-label={`Mapa interativo do campus — ${displayedFloor === 'terreo' ? 'Térreo' : displayedFloor === 'superior' ? 'Andar Superior' : 'Subsolo'}`}
     >
-      {/* Transition overlay */}
+      {/* Efeito de transição entre andares */}
       <div
         className={`absolute inset-0 bg-fundo-principal/60 z-1000 pointer-events-none transition-opacity duration-200 ${
           isTransitioning ? 'opacity-100' : 'opacity-0'

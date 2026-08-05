@@ -50,7 +50,7 @@ export default function MapaGeralPage() {
         </p>
       </div>
 
-      {/* Floor Switcher + Route button */}
+      {/* Andares e botão de rota */}
       <div className="mx-auto mb-4 flex items-center justify-center gap-3 animate-in slide-in-from-bottom-2 duration-500">
         <div className="max-w-xs flex-1">
           <FloorSwitcher currentFloor={currentFloor} onFloorChange={setCurrentFloor} />
@@ -75,7 +75,7 @@ export default function MapaGeralPage() {
         </button>
       </div>
 
-      {/* Active route banner */}
+      {/* Banner de rota ativa */}
       {routeResult && (
         <div
           className="mx-auto mb-3 max-w-2xl flex items-center gap-3 px-4 py-2.5 bg-destaque/10 border border-destaque/30 rounded-xl animate-in slide-in-from-top-2 fade-in duration-300"
@@ -89,7 +89,7 @@ export default function MapaGeralPage() {
             {routeResult.pathResult.floorChanges.length > 0
               ? `${routeResult.pathResult.floorChanges.length} troca(s) de andar`
               : 'mesmo andar'}
-            {routeResult.accessibleOnly ? ' · Rota acessível ♿' : ''}
+            {routeResult.accessibleOnly ? ' · Rota acessível' : ''}
           </p>
           <button
             onClick={() => { setRouteResult(null); }}
@@ -137,7 +137,7 @@ export default function MapaGeralPage() {
         </div>
       </div>
 
-      {/* Route Drawer */}
+      {/* Drawer de rota */}
       <RouteDrawer
         isOpen={drawerOpen}
         onClose={() => setDrawerOpen(false)}

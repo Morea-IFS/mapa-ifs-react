@@ -39,7 +39,7 @@ export default function BlocoPage() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      {/* Header */}
+      {/* Cabeçalho */}
       <div className="text-center py-10 md:py-12 pb-8" style={{ '--local-accent': accentColor } as React.CSSProperties}>
         <Link href="/" className="inline-flex items-center gap-1 text-[13px] font-medium text-texto-muted hover:text-var(--local-accent) mb-5 transition-colors duration-150">
           <ArrowLeft size={16} /> Mapa
@@ -104,7 +104,7 @@ export default function BlocoPage() {
         </a>
       )}
 
-      {/* Floors */}
+      {/* Andares */}
       <div className="flex flex-col gap-6 pb-16" role="region" aria-label={`Plantas do ${bloco.name}`}>
         {bloco.floors.map((floor, index) => (
           <motion.div
@@ -121,7 +121,7 @@ export default function BlocoPage() {
 
             <div className="flex flex-col md:flex-row gap-6 p-4 md:p-6 pb-6 items-start">
               <div className="flex-1 w-full min-w-0">
-                {/* Image */}
+                {/* Imagem da planta */}
                 <div className="w-full rounded-xl border border-borda overflow-hidden bg-fundo-secundario transition-transform duration-250 hover:scale-[1.01] cursor-zoom-in">
                   <Image
                     src={typeof floor.image === 'string' ? floor.image : floor.image}

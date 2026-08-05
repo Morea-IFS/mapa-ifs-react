@@ -21,14 +21,14 @@ export default function SideBar() {
       {/* Overlay Escurecido para Mobile */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-3000 animate-in fade-in duration-300 md:hidden" 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-3000 animate-in fade-in duration-300 lg:hidden" 
           onClick={closeSidebar} 
         />
       )}
 
       {/* Botão Hambúrguer Mobile */}
       <button
-        className={`fixed top-4 left-4 z-5000 w-11 h-11 flex flex-col justify-center items-center gap-1.25 bg-fundo-secundario/80 backdrop-blur-md border border-borda rounded-md cursor-pointer transition-all duration-300 hover:bg-fundo-cartao hover:border-destaque hover:shadow-[0_0_15px_var(--color-destaque-fraco)] md:hidden ${isOpen ? 'group is-active' : ''}`}
+        className={`fixed top-4 left-4 z-5000 w-11 h-11 flex flex-col justify-center items-center gap-1.25 bg-fundo-secundario/80 backdrop-blur-md border border-borda rounded-md cursor-pointer transition-all duration-300 hover:bg-fundo-cartao hover:border-destaque hover:shadow-[0_0_15px_var(--color-destaque-fraco)] lg:hidden ${isOpen ? 'group is-active' : ''}`}
         onClick={toggleSidebar}
         aria-label={isOpen ? "Fechar Menu" : "Abrir Menu Principal"}
         aria-expanded={isOpen}
@@ -44,7 +44,7 @@ export default function SideBar() {
         id="menu-lateral"
         role="navigation"
         aria-label="Navegação Principal do Campus"
-        className={`fixed top-0 left-0 w-65 max-w-[85vw] h-dvh bg-fundo-secundario/95 backdrop-blur-xl border-r border-borda z-4000 flex flex-col overflow-hidden transition-transform duration-300 ease-in-out md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`fixed top-0 left-0 w-65 max-w-[85vw] h-dvh bg-fundo-secundario/95 backdrop-blur-xl border-r border-borda z-4000 flex flex-col overflow-hidden transition-transform duration-300 ease-in-out lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
         aria-hidden={!isOpen}
       >
         {/* Cabeçalho */}
@@ -100,7 +100,7 @@ export default function SideBar() {
           ))}
         </nav>
 
-        {/* Rodapé / Switcher de Tema */}
+        {/* Switcher de Tema */}
         <div className="p-4 border-t border-borda flex flex-col gap-3">
           <ThemeSwitcher />
           <div className="text-center">

@@ -4,11 +4,9 @@
  * FERRAMENTA DE CALIBRAÇÃO DE ROTAS — só use em desenvolvimento
  *
  * Como usar:
- * 1. Adicione esta página em src/app/calibrar/page.tsx
- * 2. Acesse http://localhost:3000/calibrar
- * 3. Selecione o andar, selecione o tipo de nó, clique no mapa
- * 4. Copie o JSON gerado e cole no navigationGraph.ts
- * 5. Delete esta página quando terminar
+ * 1. Acesse http://localhost:3000/calibrar
+ * 2. Selecione o andar, selecione o tipo de nó, clique no mapa
+ * 3. Copie o JSON gerado e cole no navigationGraph.ts
  */
 
 import { useState, useRef, useCallback } from 'react';
@@ -19,7 +17,7 @@ import mapaSubsolo  from '@/assets/mapa_geral_subsolo.png';
 import { NAV_NODES } from '@/data/navigationGraph';
 import type { FloorLevel } from '@/components/FloorSwitcher';
 
-type NodeType = 'room' | 'corridor' | 'stairs' | 'ramp' | 'entrance' | 'junction';
+type NodeType = 'sala' | 'corredor' | 'escada' | 'rampa' | 'entrada' | 'juncao';
 
 interface PlacedNode {
   id: string;
@@ -43,26 +41,26 @@ const FLOOR_LABELS: Record<FloorLevel, string> = {
 };
 
 const TYPE_COLORS: Record<NodeType, string> = {
-  room:     '#00d9ff',
-  corridor: '#ffffff',
-  junction: '#ffdd57',
-  stairs:   '#ff922b',
-  ramp:     '#6bcb77',
-  entrance: '#c084fc',
+  sala:     '#00d9ff',
+  corredor: '#ffffff',
+  juncao:   '#ffdd57',
+  escada:   '#ff922b',
+  rampa:    '#6bcb77',
+  entrada:  '#c084fc',
 };
 
 const TYPE_LABELS: Record<NodeType, string> = {
-  room:     'Sala',
-  corridor: 'Corredor',
-  junction: 'Junção',
-  stairs:   'Escada',
-  ramp:     'Rampa',
-  entrance: 'Entrada',
+  sala:     'Sala',
+  corredor: 'Corredor',
+  juncao:   'Junção',
+  escada:   'Escada',
+  rampa:    'Rampa',
+  entrada:  'Entrada',
 };
 
 export default function CalibrePage() {
   const [floor, setFloor]       = useState<FloorLevel>('terreo');
-  const [nodeType, setNodeType] = useState<NodeType>('corridor');
+  const [nodeType, setNodeType] = useState<NodeType>('corredor');
   const [nodeId, setNodeId]     = useState('');
   const [nodeLabel, setNodeLabel] = useState('');
   const [nodes, setNodes]       = useState<PlacedNode[]>([]);
@@ -72,7 +70,7 @@ export default function CalibrePage() {
   const [selectedNode, setSelectedNode] = useState<PlacedNode | null>(null);
   const imgRef = useRef<HTMLDivElement>(null);
 
-  // Existing nodes from graph for this floor (reference)
+  // Nós já cadastrados neste andar (só pra servir de referência visual)
   const existingNodes = NAV_NODES.filter((n) => n.floor === floor);
 
   const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -106,7 +104,7 @@ export default function CalibrePage() {
     if (selectedNode?.id === id) setSelectedNode(null);
   };
 
-  // Gera o output TypeScript para copiar — um array de objetos com as propriedades necessárias
+  // Gera o código TypeScript prontinho pra colar no navigationGraph.ts
   const generateTS = () => {
     if (nodes.length === 0) return '// Nenhum nó colocado ainda.';
     return nodes.map((n) =>
@@ -161,10 +159,10 @@ export default function CalibrePage() {
 
         <div className="flex gap-4 flex-col lg:flex-row">
 
-          {/* Left panel - controls */}
+          {/* Painel de controles */}
           <div className="w-full lg:w-72 shrink-0 flex flex-col gap-3">
 
-            {/* Floor selector */}
+            {/* Seletor de andar */}
             <div className="bg-fundo-cartao border border-borda rounded-xl p-3">
               <p className="text-[10px] uppercase tracking-widest text-texto-auxiliar mb-2">Andar</p>
               <div className="flex gap-1">
@@ -182,7 +180,7 @@ export default function CalibrePage() {
               </div>
             </div>
 
-            {/* Node type */}
+            {/* Tipo de Nó */}
             <div className="bg-fundo-cartao border border-borda rounded-xl p-3">
               <p className="text-[10px] uppercase tracking-widest text-texto-auxiliar mb-2">Tipo de Nó</p>
               <div className="grid grid-cols-3 gap-1">
@@ -203,7 +201,7 @@ export default function CalibrePage() {
               </div>
             </div>
 
-            {/* Node ID & Label */}
+            {/* ID e Label do Nó */}
             <div className="bg-fundo-cartao border border-borda rounded-xl p-3 flex flex-col gap-2">
               <p className="text-[10px] uppercase tracking-widest text-texto-auxiliar">Próximo nó</p>
               <input
@@ -225,7 +223,7 @@ export default function CalibrePage() {
               </p>
             </div>
 
-            {/* Toggles */}
+            {/* Alternadores */}
             <div className="bg-fundo-cartao border border-borda rounded-xl p-3">
               <label className="flex items-center gap-2 cursor-pointer text-xs text-texto-secundario">
                 <input
@@ -238,7 +236,7 @@ export default function CalibrePage() {
               </label>
             </div>
 
-            {/* Placed nodes list */}
+            {/* Lista de nós colocados */}
             <div className="bg-fundo-cartao border border-borda rounded-xl p-3 flex-1 overflow-hidden">
               <p className="text-[10px] uppercase tracking-widest text-texto-auxiliar mb-2">
                 Nós colocados ({nodesOnFloor.length})
@@ -275,10 +273,10 @@ export default function CalibrePage() {
 
           </div>
 
-          {/* Map area */}
+          {/* Área do Mapa */}
           <div className="flex-1 min-w-0 flex flex-col gap-3">
 
-            {/* Coordinate display */}
+            {/* Coordenadas */}
             <div className="flex items-center gap-4 text-xs text-texto-auxiliar bg-fundo-cartao border border-borda rounded-xl px-4 py-2">
               <span>Cursor: <span className="text-destaque font-bold">
                 {hover ? `x: ${hover.x}% · y: ${hover.y}%` : '—'}
@@ -298,7 +296,7 @@ export default function CalibrePage() {
               </span>
             </div>
 
-            {/* Map with overlay */}
+            {/* Mapa */}
             <div
               ref={imgRef}
               className="relative w-full cursor-crosshair rounded-xl overflow-hidden border border-borda select-none"
@@ -315,13 +313,13 @@ export default function CalibrePage() {
                 priority
               />
 
-              {/* SVG overlay for nodes */}
+              {/* Overlay SVG para nós */}
               <svg
                 className="absolute inset-0 w-full h-full pointer-events-none"
                 viewBox="0 0 100 100"
                 preserveAspectRatio="none"
               >
-                {/* Existing nodes (reference, greyed) */}
+                {/* Nós existentes (referência, cinza) */}
                 {showExisting && existingNodes.map((n) => (
                   <g key={`existing-${n.id}`}>
                     <circle
@@ -334,7 +332,7 @@ export default function CalibrePage() {
                   </g>
                 ))}
 
-                {/* New nodes */}
+                {/* Nós novos */}
                 {nodesOnFloor.map((n) => (
                   <g key={n.id}>
                     <circle
@@ -349,7 +347,7 @@ export default function CalibrePage() {
                   </g>
                 ))}
 
-                {/* Hover crosshair */}
+                {/* Coordenadas do mouse */}
                 {hover && (
                   <>
                     <line x1={hover.x} y1="0" x2={hover.x} y2="100" stroke="#00d9ff" strokeWidth="0.15" opacity="0.4" />
@@ -360,7 +358,7 @@ export default function CalibrePage() {
               </svg>
             </div>
 
-            {/* TypeScript output */}
+            {/* Output TypeScript */}
             <div className="bg-fundo-cartao border border-borda rounded-xl p-3">
               <div className="flex items-center justify-between mb-2">
                 <p className="text-[10px] uppercase tracking-widest text-texto-auxiliar">
@@ -381,14 +379,14 @@ export default function CalibrePage() {
           </div>
         </div>
 
-        {/* Instructions */}
+        {/* Instruções */}
         <div className="mt-4 bg-fundo-cartao border border-borda rounded-xl p-4 text-xs text-texto-auxiliar leading-relaxed">
           <p className="font-bold text-texto-secundario mb-2">📋 Fluxo de trabalho recomendado:</p>
           <ol className="list-decimal list-inside flex flex-col gap-1">
-            <li>Comece pelo <strong className="text-texto-principal">Térreo</strong> — coloque os nós de <span style={{color: TYPE_COLORS.junction}}>Junção</span> e <span style={{color: TYPE_COLORS.corridor}}>Corredor</span> sobre os corredores centrais do mapa primeiro.</li>
-            <li>Adicione as <span style={{color: TYPE_COLORS.entrance}}>Entradas</span> de cada bloco (onde o corredor entra no bloco).</li>
-            <li>Adicione as <span style={{color: TYPE_COLORS.stairs}}>Escadas</span> e a <span style={{color: TYPE_COLORS.ramp}}>Rampa</span> — use exatamente os mesmos IDs que estão no <code>navigationGraph.ts</code>.</li>
-            <li>Adicione as <span style={{color: TYPE_COLORS.room}}>Salas</span> individualmente.</li>
+            <li>Comece pelo <strong className="text-texto-principal">Térreo</strong> — coloque os nós de <span style={{color: TYPE_COLORS.juncao}}>Junção</span> e <span style={{color: TYPE_COLORS.corredor}}>Corredor</span> sobre os corredores centrais do mapa primeiro.</li>
+            <li>Adicione as <span style={{color: TYPE_COLORS.entrada}}>Entradas</span> de cada bloco (onde o corredor entra no bloco).</li>
+            <li>Adicione as <span style={{color: TYPE_COLORS.escada}}>Escadas</span> e a <span style={{color: TYPE_COLORS.rampa}}>Rampa</span> — use exatamente os mesmos IDs que estão no <code>navigationGraph.ts</code>.</li>
+            <li>Adicione as <span style={{color: TYPE_COLORS.sala}}>Salas</span> individualmente.</li>
             <li>Repita para o <strong className="text-texto-principal">Andar Superior</strong> e <strong className="text-texto-principal">Subsolo</strong>.</li>
             <li>Copie o output TS, substitua o array <code>NAV_NODES</code> no <code>navigationGraph.ts</code>.</li>
             <li>Ajuste as arestas <code>NAV_EDGES</code> se algum ID foi renomeado.</li>

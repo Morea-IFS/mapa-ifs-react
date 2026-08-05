@@ -113,7 +113,7 @@ function RoomCombobox({
           className="absolute top-full left-0 right-0 mt-1.5 z-50 bg-fundo-cartao border border-borda rounded-xl shadow-2xl overflow-hidden"
           role="listbox"
         >
-          {/* Search input */}
+          {/* Campo de busca */}
           <div className="p-2 border-b border-borda">
             <div className="flex items-center gap-2 px-2.5 py-2 bg-fundo-principal rounded-lg">
               <Search size={13} className="text-texto-auxiliar shrink-0" aria-hidden />
@@ -129,7 +129,7 @@ function RoomCombobox({
             </div>
           </div>
 
-          {/* Options */}
+          {/* Lista de opções */}
           <ul className="max-h-56 overflow-y-auto py-1" role="listbox">
             {filtered.length === 0 ? (
               <li className="px-4 py-3 text-sm text-texto-auxiliar text-center">
@@ -190,32 +190,32 @@ function RouteSteps({ result }: { result: PathResult }) {
         text: `Andar: ${floorLabel[currentFloor]}`,
       });
     }
-    if (node.type === 'stairs') {
+    if (node.type === 'escada') {
       const next = result.path[result.path.indexOf(node) + 1];
       const dir = next && next.floor !== node.floor
         ? (next.floor === 'superior' ? 'Suba' : 'Desça')
         : 'Use';
       steps.push({
-        type: 'stairs',
+        type: 'escada',
         icon: <span aria-hidden className="text-base">🪜</span>,
         text: `${dir} pela escada — ${node.label ?? 'Escada'}`,
       });
     }
-    if (node.type === 'ramp') {
+    if (node.type === 'rampa') {
       const next = result.path[result.path.indexOf(node) + 1];
       const dir = next && next.floor !== node.floor
         ? (next.floor === 'superior' ? 'Suba' : 'Desça')
         : 'Use';
       steps.push({
-        type: 'ramp',
+        type: 'rampa',
         icon: <span aria-hidden className="text-base">♿</span>,
         text: `${dir} pela rampa — ${node.label ?? 'Rampa'}`,
       });
     }
-    if (node.type === 'room' || node.type === 'bathroom') {
+    if (node.type === 'sala' || node.type === 'banheiro') {
       steps.push({
-        type: 'room',
-        icon: node.type === 'bathroom' 
+        type: 'sala',
+        icon: node.type === 'banheiro' 
           ? <span aria-hidden className="text-base shrink-0 mt-0.5">🚻</span>
           : <MapPin size={14} className="text-destaque shrink-0 mt-0.5" aria-hidden />,
         text: node.label ?? node.id,
@@ -230,8 +230,8 @@ function RouteSteps({ result }: { result: PathResult }) {
           key={i}
           className={`flex items-start gap-2.5 text-[13px] leading-snug py-1.5 px-3 rounded-lg ${
             step.type === 'floor'   ? 'bg-destaque/8 text-destaque font-semibold' :
-            step.type === 'stairs' || step.type === 'ramp' ? 'bg-fundo-cartao-hover text-texto-principal font-medium' :
-            step.type === 'room'   ? 'text-texto-principal' : 'text-texto-secundario'
+            step.type === 'escada' || step.type === 'rampa' ? 'bg-fundo-cartao-hover text-texto-principal font-medium' :
+            step.type === 'sala'   ? 'text-texto-principal' : 'text-texto-secundario'
           }`}
         >
           {step.icon}
@@ -242,7 +242,7 @@ function RouteSteps({ result }: { result: PathResult }) {
   );
 }
 
-// ── Componente principal ────────────────────────────────────
+// ── Componente principal 
 export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDrawerProps) {
   const [fromId, setFromId] = useState('');
   const [toId,   setToId]   = useState('');
@@ -273,7 +273,7 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
       if (isBathroomTarget && typeof NODE_MAP !== 'undefined') {
         const bathroomNodes = Array.from(NODE_MAP.values()).filter(
           (n) =>
-            n.type === 'bathroom' ||
+            n.type === 'banheiro' ||
             n.id.toLowerCase().includes('banheiro') ||
             n.label?.toLowerCase().includes('banheiro')
         );

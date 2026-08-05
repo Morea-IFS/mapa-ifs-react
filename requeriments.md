@@ -1,4 +1,4 @@
-# 📋 Documento de Especificação de Requisitos de Software (SRS) — MERO
+# Documento de Especificação de Requisitos de Software (SRS) — MERO
 
 > **Sistema:** MERO — *Mapa de Espaços, Recursos e Orientação*  
 > **Instituição:** Instituto Federal de Sergipe (IFS) — Projeto Morea  
@@ -13,7 +13,7 @@ Este documento especifica a totalidade dos **Requisitos Funcionais (RF)**, **Req
 
 ---
 
-## ⚙️ 2. Requisitos Funcionais (RF)
+## 2. Requisitos Funcionais (RF)
 
 ### 2.1 Subsistema de Mapeamento e Cartografia Interativa
 
@@ -149,7 +149,7 @@ Este documento especifica a totalidade dos **Requisitos Funcionais (RF)**, **Req
 
 ---
 
-## 🎨 3. Requisitos Não Funcionais (RNF)
+## 3. Requisitos Não Funcionais (RNF)
 
 ### 3.1 Desempenho e Eficiência (Performance)
 
@@ -214,7 +214,7 @@ Este documento especifica a totalidade dos **Requisitos Funcionais (RF)**, **Req
 
 ---
 
-## 🔒 4. Regras de Negócio (RN)
+## 4. Regras de Negócio (RN)
 
 | ID | Nome da Regra | Descrição Detalhada da Regra de Negócio |
 | :--- | :--- | :--- |
