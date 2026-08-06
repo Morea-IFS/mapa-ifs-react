@@ -55,7 +55,7 @@ export default function Footer() {
             © {currentYear} <strong className="text-texto-secundario">MERO</strong>
           </p>
           <p className="flex items-center gap-1">
-            Desenvolvido para o <strong className="text-destaque font-medium">Projeto Morea — IFS</strong>
+            Mais um <strong className="text-destaque font-medium">Projeto Morea</strong>
           </p>
         </div>
       </div>
