@@ -381,7 +381,7 @@ export default function CalibrePage() {
 
         {/* Instruções */}
         <div className="mt-4 bg-fundo-cartao border border-borda rounded-xl p-4 text-xs text-texto-auxiliar leading-relaxed">
-          <p className="font-bold text-texto-secundario mb-2">📋 Fluxo de trabalho recomendado:</p>
+          <p className="font-bold text-texto-secundario mb-2">Fluxo de trabalho recomendado:</p>
           <ol className="list-decimal list-inside flex flex-col gap-1">
             <li>Comece pelo <strong className="text-texto-principal">Térreo</strong> — coloque os nós de <span style={{color: TYPE_COLORS.juncao}}>Junção</span> e <span style={{color: TYPE_COLORS.corredor}}>Corredor</span> sobre os corredores centrais do mapa primeiro.</li>
             <li>Adicione as <span style={{color: TYPE_COLORS.entrada}}>Entradas</span> de cada bloco (onde o corredor entra no bloco).</li>
@@ -390,7 +390,6 @@ export default function CalibrePage() {
             <li>Repita para o <strong className="text-texto-principal">Andar Superior</strong> e <strong className="text-texto-principal">Subsolo</strong>.</li>
             <li>Copie o output TS, substitua o array <code>NAV_NODES</code> no <code>navigationGraph.ts</code>.</li>
             <li>Ajuste as arestas <code>NAV_EDGES</code> se algum ID foi renomeado.</li>
-            <li>Delete esta página de calibração do projeto.</li>
           </ol>
         </div>
 

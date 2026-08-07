@@ -10,7 +10,7 @@
 
 ---
 
-## 📌 Visão Geral do Projeto
+## Visão Geral do Projeto
 
 Navegar em grandes campi educacionais pode ser um desafio. O MERO resolve esse problema oferecendo um **mapa interativo de múltiplos andares** combinado com um **sistema de roteamento dinâmico inteligente (A*)**, permitindo que qualquer pessoa trace a rota mais rápida até uma sala, laboratório, setor administrativo ou banheiro no campus.
 
@@ -18,23 +18,23 @@ O projeto foi construído focando em **experiência do usuário (UX)**, **desemp
 
 ---
 
-## ✨ Principais Funcionalidades
+## Principais Funcionalidades
 
-- **🗺️ Mapeamento Interativo Multi-Andar**: Visualização das plantas baixas do campus divididas por andares (**Térreo**, **Andar Superior** e **Subsolo**), integradas via Leaflet (`L.CRS.Simple`).
-- **🧭 Motor de Roteamento Inteligente (Algoritmo A*)**:
+- **Mapeamento Interativo Multi-Andar**: Visualização das plantas baixas do campus divididas por andares (**Térreo**, **Andar Superior** e **Subsolo**), integradas via Leaflet (`L.CRS.Simple`).
+- **Motor de Roteamento Inteligente (Algoritmo A*)**:
   - Traça o caminho mais curto entre qualquer sala de origem e destino no campus.
   - Suporta transição suave entre andares por escadas e rampas.
   - **Desenho da Rota Animada**: Exibe linhas pontilhadas animadas, setas direcionais do sentido de deslocamento e marcadores de transição.
-- **🚗 Destino Inteligente ("Banheiro Mais Próximo")**: Ao selecionar o destino virtual "Banheiro", o sistema calcula dinamicamente qual o sanitário mais próximo a partir da localização atual.
-- **♿ Modo Baixa Mobilidade / Acessibilidade**: Opção que reconfigura o grafo de navegação em tempo real, desconsiderando escadas e priorizando rampas de acessibilidade para cadeirantes ou pessoas com restrições de mobilidade.
-- **🤟 Suporte a Libras (VLibras)**: Widget integrado para tradução em tempo real de conteúdos para a Língua Brasileira de Sinais.
-- **⚡ Monitoramento Energético (Projeto Morea)**: Integração com painéis IoT em tempo real para acompanhamento do consumo elétrico dos blocos do IFS.
-- **📱 Responsivo & Dark Mode**: Interface otimizada para dispositivos móveis e desktops, com alternância de temas claro/escuro.
-- **🛠️ Ferramenta de Calibração Visual (`/calibrar`)**: Interface para desenvolvedores marcarem e exportarem rapidamente as coordenadas percentuais `(x%, y%)` dos nós do mapa.
+- **Destino Inteligente ("Banheiro Mais Próximo")**: Ao selecionar o destino virtual "Banheiro", o sistema calcula dinamicamente qual o sanitário mais próximo a partir da localização atual.
+- **Modo Baixa Mobilidade / Acessibilidade**: Opção que reconfigura o grafo de navegação em tempo real, desconsiderando escadas e priorizando rampas de acessibilidade para cadeirantes ou pessoas com restrições de mobilidade.
+- **Suporte a Libras (VLibras)**: Widget integrado para tradução em tempo real de conteúdos para a Língua Brasileira de Sinais.
+- **Monitoramento Energético (Projeto Morea)**: Integração com painéis IoT em tempo real para acompanhamento do consumo elétrico dos blocos do IFS.
+- **Responsivo & Dark Mode**: Interface otimizada para dispositivos móveis e desktops, com alternância de temas claro/escuro.
+- **Ferramenta de Calibração Visual (`/calibrar`)**: Interface para desenvolvedores marcarem e exportarem rapidamente as coordenadas percentuais `(x%, y%)` dos nós do mapa.
 
 ---
 
-## ⚙️ Como Funciona o Sistema de Navegação
+## Como Funciona o Sistema de Navegação
 
 A navegação no MERO é baseada em uma estrutura de **Grafo Espacial** definida em `src/data/navigationGraph.ts`:
 
@@ -48,7 +48,7 @@ A navegação no MERO é baseada em uma estrutura de **Grafo Espacial** definida
 
 ---
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Core**: Next.js 16 (App Router) & React 19
 - **Linguagem**: TypeScript 5
@@ -57,10 +57,11 @@ A navegação no MERO é baseada em uma estrutura de **Grafo Espacial** definida
 - **Animações**: Framer Motion
 - **Ícones**: Lucide React
 - **Acessibilidade**: VLibras Widget
+- **Testes**: Jest 29 + React Testing Library 16
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 mapa-ifs-react/
@@ -87,7 +88,7 @@ mapa-ifs-react/
 
 ---
 
-## 🔧 Como Executar o Projeto Localmente
+## Como Executar o Projeto Localmente
 
 ### Pré-requisitos
 - **Node.js** 18.x ou superior
@@ -116,7 +117,7 @@ mapa-ifs-react/
 
 ---
 
-## 📐 Adicionando ou Ajustando Rotas (`/calibrar`)
+## Adicionando ou Ajustando Rotas (`/calibrar`)
 
 Para adicionar novos pontos ou ajustar conexões no mapa:
 
@@ -127,6 +128,41 @@ Para adicionar novos pontos ou ajustar conexões no mapa:
 
 ---
 
-## 📄 Licença e Créditos
+## Testes Unitários
+
+O MERO possui 100% de cobertura nos testes unitários e de integração das suas
+funcionalidades críticas, garantindo alta estabilidade, prevenção de regressões
+e validação de acessibilidade.
+
+### Comandos de Teste:
+- Executar todos os testes:
+   npm run test
+- Para executar um em específico é só apertar "p" depois de rodar o comando e escrever o nome do arquivo ou caminho em específico
+
+### Suítes de Testes Cobertas (15 Test Suites / 71 Testes)
+
+1. Páginas & Roteamento (src/app/):
+   page.test.tsx: Interação na página principal, fluxo do drawer de rotas, limpeza de rotas e exibição de banners.
+   layout.test.tsx: Renderização da estrutura global, sidebar, provedor de tema e widget VLibras.
+   bloco/[id]/page.test.tsx: Renderização dos blocos e painéis de consumo de energia IoT.
+   calibrar/page.test.tsx: Adição/remoção de nós no mapa, troca de andar e exportação de dados (JSON / TS).
+
+2. Componentes de Interface (src/components/):
+   CampusMap.test.tsx: Integração Leaflet, renderização e acessibilidade para leitores de tela (aria-label).
+   RouteDrawer.test.tsx: Seleção de salas, busca assíncrona, sanitário mais próximo e descarte de rota com isolamento por timers.
+   RouteOverlay.test.tsx: Validação do desenho de linhas SVG e marcadores de waypoints da rota.
+   FloorSwitcher.test.tsx: Alternância entre andares e estados acessíveis.
+   SideBar.test.tsx: Comportamento de abertura/fechamento em mobile e links.
+   ThemeProvider.test.tsx e ThemeSwitcher.test.tsx: Alternância de temas (Claro, Escuro, Alto Contraste) e integração com localStorage.
+   VLibrasWidget.test.tsx e Footer.test.tsx: Carregamento de scripts e informações institucionais.
+
+3. Regras de Negócio e Algoritmos (src/data/ & src/types/):
+   navigationGraph.test.ts: Integridade dos nós do mapa, unicidade de IDs e eficácia do algoritmo A* (filtro de acessibilidade, transição por rampas).
+   blocos.test.ts: Estrutura de dados das salas e blocos institucionais do IFS.
+   types/index.test.ts: Validação e tipagem do TypeScript.
+
+---
+
+## Licença e Créditos
 
 Desenvolvido para o **Instituto Federal de Sergipe (IFS)** — **Projeto Morea**.

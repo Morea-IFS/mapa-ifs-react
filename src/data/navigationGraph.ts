@@ -510,7 +510,7 @@ export const NAV_EDGES: NavEdge[] = [
   { from: 'S_B14',                to: 'S_JUNCTION_B_L' },
 
   // ── Bloco C (Superior) ──
-  { from: 'S_JUNCTION_C_L',       to: 'S_C_ENTRY' },
+  { from: 'S_JUNCTION_C_W',       to: 'S_C_ENTRY' },
   { from: 'S_C_ENTRY',            to: 'S_C17' },
   { from: 'S_C17',                to: 'S_C16' },
   { from: 'S_C16',                to: 'S_C15' },
