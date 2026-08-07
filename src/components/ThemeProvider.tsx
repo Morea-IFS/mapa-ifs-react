@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
-type Theme = 'escuro' | 'claro' | 'alto-contraste';
+export type Theme = 'escuro' | 'claro' | 'alto-contraste';
 
 interface ThemeContextProps {
   theme: Theme;
@@ -12,22 +12,17 @@ interface ThemeContextProps {
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('escuro');
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const storedTheme = localStorage.getItem('mapa-ifs-theme') as Theme | null;
+      return storedTheme || 'escuro';
+    }
+    return 'escuro';
+  });
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem('mapa-ifs-theme') as Theme | null;
-    const initialTheme = storedTheme || 'escuro';
-    
-    // Atualiza o DOM imediatamente
-    document.documentElement.setAttribute('data-tema', initialTheme);
-    
-    // Adia a atualização do estado do React para o próximo ciclo (macrotask),
-    // evitando o aviso de "cascading renders" (set-state-in-effect)
-    if (storedTheme) {
-      const timer = setTimeout(() => setThemeState(storedTheme), 0);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+    document.documentElement.setAttribute('data-tema', theme);
+  }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);

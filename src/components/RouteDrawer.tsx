@@ -17,7 +17,7 @@ export interface RouteResult {
   accessibleOnly: boolean;
 }
 
-// ── Combobox com busca 
+// Combobox com busca 
 function RoomCombobox({
   value,
   onChange,
@@ -25,7 +25,7 @@ function RoomCombobox({
   excludeId,
   icon: Icon,
   accentColor,
-  isDestination = false, // Nova flag para identificar se é o campo de destino
+  isDestination = false,
 }: {
   value: string;
   onChange: (id: string) => void;
@@ -169,7 +169,7 @@ function RoomCombobox({
   );
 }
 
-// ── Steps de instrução da rota ──────────────────────────────
+// Steps de instrução da rota
 function RouteSteps({ result }: { result: PathResult }) {
   const steps: { icon: React.ReactNode; text: string; type: string }[] = [];
 
@@ -242,7 +242,7 @@ function RouteSteps({ result }: { result: PathResult }) {
   );
 }
 
-// ── Componente principal 
+// Componente principal 
 export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDrawerProps) {
   const [fromId, setFromId] = useState('');
   const [toId,   setToId]   = useState('');
