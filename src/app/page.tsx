@@ -23,7 +23,6 @@ const CampusMap = dynamic(() => import('@/components/CampusMap'), {
 
 export default function MapaGeralPage() {
   const [currentFloor, setCurrentFloor] = useState<FloorLevel>('terreo');
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [routeResult, setRouteResult] = useState<RouteResult | null>(null);
 
   const handleRouteChange = useCallback((result: RouteResult | null) => {
@@ -50,29 +49,8 @@ export default function MapaGeralPage() {
         </p>
       </div>
 
-      {/* Andares e botão de rota */}
-      <div className="mx-auto mb-4 flex items-center justify-center gap-3 animate-in slide-in-from-bottom-2 duration-500">
-        <div className="max-w-xs flex-1">
-          <FloorSwitcher currentFloor={currentFloor} onFloorChange={setCurrentFloor} />
-        </div>
-
-        <button
-          onClick={() => setDrawerOpen(true)}
-          aria-label="Abrir painel de busca de rota"
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold border transition-all duration-200 shrink-0 ${
-            routeResult
-              ? 'bg-destaque text-white border-destaque shadow-[0_0_16px_rgba(0,217,255,0.4)]'
-              : 'bg-fundo-cartao text-texto-principal border-borda hover:border-destaque hover:text-destaque hover:shadow-[0_0_12px_rgba(0,217,255,0.2)]'
-          }`}
-        >
-          <Navigation size={15} aria-hidden />
-          <span className="hidden sm:inline">
-            {routeResult ? 'Rota Ativa' : 'Traçar Rota'}
-          </span>
-          {routeResult && (
-            <span className="w-2 h-2 rounded-full bg-white animate-pulse" aria-hidden />
-          )}
-        </button>
+      <div className="mx-auto mb-4 flex max-w-xs justify-center">
+        <FloorSwitcher currentFloor={currentFloor} onFloorChange={setCurrentFloor} />
       </div>
 
       {/* Banner de rota ativa */}
@@ -103,6 +81,16 @@ export default function MapaGeralPage() {
 
       <div className="mx-auto mb-10 w-full animate-in slide-in-from-bottom-4 duration-700">
         <CampusMap floor={currentFloor} routeResult={routeResult} />
+      </div>
+
+      {/* Pesquisa de espaços disponível diretamente na tela principal */}
+      <div className="mx-auto mb-5 max-w-3xl animate-in slide-in-from-bottom-2 duration-500">
+        <RouteDrawer
+          isOpen={true}
+          onClose={() => {}}
+          presentation="inline"
+          onRouteChange={handleRouteChange}
+        />
       </div>
 
       <div className="pb-16">
@@ -137,15 +125,7 @@ export default function MapaGeralPage() {
         </div>
       </div>
 
-      {/* Drawer de rota */}
-      <RouteDrawer
-        isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        onRouteChange={(result) => {
-          handleRouteChange(result);
-          if (result) setDrawerOpen(false); // Fechar o drawer apenas se uma rota for encontrada, permitindo que o usuário corrija a busca caso contrário
-        }}
-      />
+
     </div>
   );
 }

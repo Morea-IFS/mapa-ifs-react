@@ -42,8 +42,8 @@ jest.mock('@/data/blocos', () => ({
 // 3. Mock do RouteDrawer para controlar a interação facilmente
 jest.mock('@/components/RouteDrawer', () => ({
   __esModule: true,
-  default: ({ isOpen, onRouteChange }: any) => {
-    if (!isOpen) return null;
+  default: ({ isOpen, onRouteChange, presentation }: any) => {
+    if (!isOpen && presentation !== 'inline') return null;
     return (
       <div data-testid="route-drawer-mock">
         <button
@@ -70,22 +70,16 @@ describe('MapaGeralPage', () => {
     expect(screen.getByText('Bloco A')).toBeInTheDocument();
   });
 
-  test('deve abrir o drawer ao clicar em "Traçar Rota"', () => {
+  test('deve exibir a busca de rota diretamente na tela principal', () => {
     render(<MapaGeralPage />);
-    
-    const btn = screen.getByRole('button', { name: /abrir painel de busca de rota/i });
-    fireEvent.click(btn);
-    
     expect(screen.getByTestId('route-drawer-mock')).toBeInTheDocument();
   });
 
   test('deve exibir o banner de "Rota ativa" após selecionar uma rota', () => {
     render(<MapaGeralPage />);
     
-    // Abre o drawer
-    fireEvent.click(screen.getByRole('button', { name: /abrir painel de busca de rota/i }));
-    
-    // Clica no botão simulado do drawer
+    // A busca já fica disponível na tela principal.
+    // Clica no botão simulado da busca
     fireEvent.click(screen.getByText('Simular Rota'));
     
     // Verifica se o banner aparece
@@ -97,7 +91,6 @@ describe('MapaGeralPage', () => {
     render(<MapaGeralPage />);
     
     // Ativa a rota
-    fireEvent.click(screen.getByRole('button', { name: /abrir painel de busca de rota/i }));
     fireEvent.click(screen.getByText('Simular Rota'));
     
     // Limpa

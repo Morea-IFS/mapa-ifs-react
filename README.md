@@ -21,6 +21,7 @@ O projeto foi construído focando em **experiência do usuário (UX)**, **desemp
 ## Principais Funcionalidades
 
 - **Mapeamento Interativo Multi-Andar**: Visualização das plantas baixas do campus divididas por andares (**Térreo**, **Andar Superior** e **Subsolo**), integradas via Leaflet (`L.CRS.Simple`).
+- **Pesquisa de Espaços na Tela Principal**: seleção de origem e destino por dropdown, com busca tolerante a acentos e correspondência por palavras. Consultas como `Sala 2` podem encontrar `Sala de Aula 2`, sem exigir a digitação do nome completo.
 - **Motor de Roteamento Inteligente (Algoritmo A*)**:
   - Traça o caminho mais curto entre qualquer sala de origem e destino no campus.
   - Suporta transição suave entre andares por escadas e rampas.

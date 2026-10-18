@@ -8,6 +8,7 @@ jest.mock('@/data/navigationGraph', () => ({
     { id: 'T_ENTRY', label: 'Entrada Principal', floor: 'terreo', blockId: 'A' },
     { id: 'SALA_1', label: 'Sala 01', floor: 'terreo', blockId: 'A' },
     { id: 'SALA_2', label: 'Sala 02', floor: 'superior', blockId: 'A' },
+    { id: 'S_B08', label: 'Sala de Aula 2', floor: 'superior', blockId: 'B' },
   ],
   NODE_MAP: new Map([
     [
@@ -53,9 +54,27 @@ describe('RouteDrawer Component', () => {
       />
     );
 
-    expect(screen.getByText('Buscar Rota')).toBeInTheDocument();
+    expect(screen.getByText('Encontre um espaço')).toBeInTheDocument();
     expect(screen.getByText('Selecione a sala de origem')).toBeInTheDocument();
     expect(screen.getByText('Selecione a sala de destino')).toBeInTheDocument();
+  });
+
+
+  it('deve encontrar Sala de Aula 2 ao pesquisar apenas Sala 2', () => {
+    render(
+      <RouteDrawer
+        isOpen={true}
+        onClose={mockOnClose}
+        onRouteChange={mockOnRouteChange}
+      />
+    );
+
+    fireEvent.click(screen.getByText('Selecione a sala de destino'));
+    fireEvent.change(screen.getAllByLabelText('Buscar sala')[0], {
+      target: { value: 'Sala 2' },
+    });
+
+    expect(screen.getByRole('button', { name: /Sala de Aula 2/i })).toBeInTheDocument();
   });
 
   it('deve fechar o drawer ao clicar no botão fechar', () => {
