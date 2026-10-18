@@ -3,11 +3,13 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { X, Navigation, MapPin, ArrowRight, AlertCircle, Accessibility, ChevronDown, Search } from 'lucide-react';
 import { findPath, ROOM_OPTIONS, NODE_MAP, type PathResult, type FloorLevel } from '@/data/navigationGraph';
+import { scoreRoomMatch } from '@/lib/roomSearch';
 
 interface RouteDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onRouteChange: (result: RouteResult | null) => void;
+  presentation?: 'drawer' | 'inline';
 }
 
 export interface RouteResult {
@@ -60,11 +62,19 @@ function RoomCombobox({
       ];
     }
 
-    return baseOptions.filter(
-      (r) =>
-        r.id !== excludeId &&
-        (q === '' || r.label.toLowerCase().includes(q))
-    ).slice(0, 60);
+    const scoredOptions = baseOptions
+      .filter((room) => room.id !== excludeId)
+      .map((room, index) => ({
+        room,
+        index,
+        score: scoreRoomMatch(q, room.label),
+      }))
+      .filter((item) => q === '' || item.score > 0)
+      .sort((a, b) => b.score - a.score || a.index - b.index)
+      .slice(0, 60)
+      .map((item) => item.room);
+
+    return scoredOptions;
   }, [query, excludeId, isDestination]);
 
   // Procura o selecionado considerando a opção virtual também
@@ -243,7 +253,7 @@ function RouteSteps({ result }: { result: PathResult }) {
 }
 
 // Componente principal 
-export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDrawerProps) {
+export default function RouteDrawer({ isOpen, onClose, onRouteChange, presentation = 'drawer' }: RouteDrawerProps) {
   const [fromId, setFromId] = useState('');
   const [toId,   setToId]   = useState('');
   const [accessible, setAccessible] = useState(false);
@@ -327,7 +337,7 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
 
   return (
     <>
-      {isOpen && (
+      {presentation === 'drawer' && isOpen && (
         <div
           className="fixed inset-0 bg-black/40 backdrop-blur-sm z-3500 md:hidden animate-in fade-in duration-200"
           onClick={onClose}
@@ -335,32 +345,32 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
         />
       )}
 
-      <aside
-        role="dialog"
-        aria-modal="true"
+      {(presentation === 'inline' || isOpen) && <aside
+        role={presentation === 'inline' ? 'region' : 'dialog'}
+        aria-modal={presentation === 'drawer' ? true : undefined}
         aria-label="Buscar rota no campus"
-        className={`fixed top-0 right-0 h-dvh w-full max-w-sm bg-fundo-secundario/98 backdrop-blur-xl border-l border-borda z-4500 flex flex-col overflow-hidden shadow-2xl transition-transform duration-350 ease-in-out ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={presentation === 'inline'
+          ? 'w-full rounded-2xl border border-borda bg-fundo-secundario/90 shadow-lg overflow-visible'
+          : `fixed top-0 right-0 h-dvh w-full max-w-sm bg-fundo-secundario/98 backdrop-blur-xl border-l border-borda z-4500 flex flex-col overflow-hidden shadow-2xl transition-transform duration-350 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        <div className="flex items-center gap-3 px-5 pt-6 pb-4 border-b border-borda shrink-0">
+        <div className={`flex items-center gap-3 px-5 pt-5 pb-4 border-b border-borda ${presentation === 'drawer' ? 'shrink-0' : ''}`}>
           <div className="w-9 h-9 rounded-xl bg-destaque/15 flex items-center justify-center shrink-0">
             <Navigation size={18} className="text-destaque" aria-hidden />
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="text-base font-bold text-texto-principal tracking-tight">Buscar Rota</h2>
-            <p className="text-[11px] text-texto-auxiliar">Navegação pelo campus IFS</p>
+            <h2 className="text-base font-bold text-texto-principal tracking-tight">Encontre um espaço</h2>
+            <p className="text-[11px] text-texto-auxiliar">Selecione origem e destino para traçar uma rota pelo campus.</p>
           </div>
-          <button
+          {presentation === 'drawer' && <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center rounded-lg text-texto-auxiliar hover:text-texto-principal hover:bg-fundo-cartao transition-colors duration-150"
             aria-label="Fechar painel de busca de rota"
           >
             <X size={18} aria-hidden />
-          </button>
+          </button>}
         </div>
 
-        <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-5">
+        <div className={`px-5 py-5 flex flex-col gap-5 ${presentation === 'drawer' ? 'flex-1 overflow-y-auto' : ''}`}>
           <div className="flex flex-col gap-3">
             <div>
               <label className="block text-[11px] font-semibold uppercase tracking-wider text-texto-auxiliar mb-1.5">
@@ -492,7 +502,7 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange }: RouteDra
             </div>
           )}
         </div>
-      </aside>
+      </aside>}
     </>
   );
 }
