@@ -6,7 +6,8 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { getBlocoById } from '@/data/blocos';
 import { ArrowLeft } from 'lucide-react';
-import { Zap, ExternalLink } from 'lucide-react';
+import { Zap, ExternalLink, CalendarClock } from 'lucide-react';
+import { scheduleNamesForRoom } from '@/data/horariosRooms';
 
 export default function BlocoPage() {
   const params = useParams();
@@ -139,8 +140,10 @@ export default function BlocoPage() {
                   Salas e Setores
                 </h3>
                 <ul className="flex flex-col gap-1.5" aria-labelledby={`title-rooms-${index}`}>
-                  {floor.rooms.map((room) => (
-                    <li key={`${floor.name}-${room.code}`} className="flex gap-2 py-1.5 text-[13px] border-b border-borda/50 last:border-b-0 leading-relaxed">
+                  {floor.rooms.map((room) => {
+                    const scheduleRoom = scheduleNamesForRoom(bloco.id, floor.name, room.code)[0];
+                    return (
+                    <li key={`${floor.name}-${room.code}`} className="flex items-center gap-2 py-1.5 text-[13px] border-b border-borda/50 last:border-b-0 leading-relaxed">
                       <span
                         className="font-semibold shrink-0 text-[12px]"
                         style={{ color: accentColor }}
@@ -152,8 +155,19 @@ export default function BlocoPage() {
                         <span className="sr-only">Sala {room.code}: </span>
                         {room.name}
                       </span>
+                      {scheduleRoom && (
+                        <Link
+                          href={`/horarios?aba=sala&sala=${encodeURIComponent(scheduleRoom)}`}
+                          aria-label={`Ver horários de ${room.name}`}
+                          title="Ver horários"
+                          className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-texto-auxiliar transition-colors hover:bg-destaque-fraco hover:text-destaque focus:outline-none focus-visible:ring-2 focus-visible:ring-destaque"
+                        >
+                          <CalendarClock size={15} aria-hidden="true" />
+                        </Link>
+                      )}
                     </li>
-                  ))}
+                    );
+                  })}
                 </ul>
               </div>
             </div>

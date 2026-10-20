@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { Suspense, useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
 import { blocos } from '@/data/blocos';
 import Link from 'next/link';
-import { ArrowRight, Navigation } from 'lucide-react';
+import { ArrowRight, CalendarClock, Navigation } from 'lucide-react';
 import FloorSwitcher, { type FloorLevel } from '@/components/FloorSwitcher';
 import RouteDrawer, { type RouteResult } from '@/components/RouteDrawer';
-import { NAV_NODES } from '@/data/navigationGraph';
+import { NAV_NODES, NODE_MAP } from '@/data/navigationGraph';
 
 const CampusMap = dynamic(() => import('@/components/CampusMap'), {
   ssr: false,
@@ -21,7 +22,12 @@ const CampusMap = dynamic(() => import('@/components/CampusMap'), {
   ),
 });
 
-export default function MapaGeralPage() {
+function MapaGeralContent() {
+  // /?destino=S_B07 (vindo da página de horários): já sai com a rota da Entrada até a sala
+  const searchParams = useSearchParams();
+  const destino = searchParams?.get('destino') ?? null;
+  const initialToId = destino && destino !== 'T_ENTRY' && NODE_MAP.has(destino) ? destino : undefined;
+
   const [currentFloor, setCurrentFloor] = useState<FloorLevel>('terreo');
   const [routeResult, setRouteResult] = useState<RouteResult | null>(null);
 
@@ -90,7 +96,25 @@ export default function MapaGeralPage() {
           onClose={() => {}}
           presentation="inline"
           onRouteChange={handleRouteChange}
+          initialFromId={initialToId ? 'T_ENTRY' : undefined}
+          initialToId={initialToId}
         />
+      </div>
+
+      <div className="mx-auto mb-5 max-w-3xl">
+        <Link
+          href="/horarios"
+          className="group flex items-center gap-3.5 rounded-xl border border-borda bg-fundo-cartao p-4 transition-colors duration-200 hover:border-destaque focus:outline-none focus-visible:ring-2 focus-visible:ring-destaque"
+        >
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-destaque-fraco text-destaque">
+            <CalendarClock size={20} aria-hidden />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[15px] font-semibold text-texto-principal">Horários das salas</span>
+            <span className="block text-xs text-texto-secundario">Salas livres agora, a semana de cada sala e a da sua turma</span>
+          </span>
+          <ArrowRight className="shrink-0 text-texto-auxiliar transition-transform duration-150 group-hover:translate-x-1" size={18} aria-hidden />
+        </Link>
       </div>
 
       <div className="pb-16">
@@ -127,5 +151,13 @@ export default function MapaGeralPage() {
 
 
     </div>
+  );
+}
+
+export default function MapaGeralPage() {
+  return (
+    <Suspense fallback={null}>
+      <MapaGeralContent />
+    </Suspense>
   );
 }

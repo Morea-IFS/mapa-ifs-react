@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { blocos } from '@/data/blocos';
 import ThemeSwitcher from './ThemeSwitcher';
-import { Map, MapPin } from 'lucide-react';
+import { CalendarClock, Map, MapPin } from 'lucide-react';
 
 export default function SideBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,6 +72,21 @@ export default function SideBar() {
             {isActive('/') && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.75 h-5 bg-destaque rounded-r-sm" aria-hidden="true" />}
             <span className="w-5 flex justify-center" aria-hidden="true"><MapPin size={18} /></span>
             <span>Mapa Geral</span>
+          </Link>
+
+          <Link
+            href="/horarios"
+            onClick={closeSidebar}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-all duration-150 relative ${
+              isActive('/horarios')
+                ? 'bg-destaque-fraco text-destaque'
+                : 'text-texto-secundario hover:bg-white/5 hover:text-texto-principal'
+            }`}
+            aria-current={isActive('/horarios') ? 'page' : undefined}
+          >
+            {isActive('/horarios') && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.75 h-5 bg-destaque rounded-r-sm" aria-hidden="true" />}
+            <span className="w-5 flex justify-center" aria-hidden="true"><CalendarClock size={18} /></span>
+            <span>Horários</span>
           </Link>
 
           <div className="px-3 pt-4 pb-2 text-[11px] font-semibold uppercase tracking-wider text-texto-auxiliar" aria-hidden="true">
