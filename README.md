@@ -164,6 +164,28 @@ e validação de acessibilidade.
 
 ---
 
+## Horários das salas (`/horarios`)
+
+Página que consome a **MERO Horários API** (projeto separado) com a grade de aulas do semestre, pensada primeiro para o celular.
+
+| Aba | O que faz |
+|---|---|
+| Salas livres | Escolha o dia e os períodos de aula (ou um horário exato) e veja quais salas estão livres, agrupadas por bloco, com "livre até HH:mm". Abre já no período atual. |
+| Por sala | Busca uma sala e mostra a semana dela (um dia por vez no celular, cinco colunas no computador) e se está em uso agora. |
+| Por turma | Escolha curso e período para ver a semana da turma, com a sala de cada aula e a próxima aula em destaque. A turma fica salva no aparelho. |
+| Buscar aula | Procura por disciplina, docente ou turma, sem diferenciar acentos. |
+
+**Ligação com o mapa:** onde a sala existe no mapa aparece **Traçar rota** (abre `/?destino=<ponto>`, que já traça o caminho da Entrada até a sala), e na página de cada bloco as salas com horários têm um atalho para a semana delas. A tabela que liga os nomes da grade aos pontos do mapa está em `src/data/horariosRooms.ts` (salas sem correspondência clara ficam sem link, de propósito).
+
+**Configuração:** copie `.env.example` para `.env.local` e ajuste `NEXT_PUBLIC_HORARIOS_API_URL`. Em produção (ex.: Vercel), defina a mesma variável no painel e reimplante, porque ela é lida na compilação.
+
+**Links compartilháveis:** `/horarios?aba=turma&turma=3%C2%BA%20BSI-N`, `/horarios?aba=sala&sala=SALA%2001-BL02-S`, `/horarios?aba=busca&q=f%C3%ADsica`.
+
+**Observações:**
+- Os horários são a **previsão pela grade regular**; não incluem feriados, eventos, trocas ou reservas.
+- No plano gratuito do Render a API "dorme"; a primeira consulta pode levar até 1 minuto e a página avisa isso.
+- Nomes por extenso dos cursos estão em `src/lib/horarios/courses.ts` (só siglas conhecidas); complete conforme precisar.
+
 ## Licença e Créditos
 
 Desenvolvido para o **Instituto Federal de Sergipe (IFS)** — **Projeto Morea**.
