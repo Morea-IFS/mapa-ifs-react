@@ -10,6 +10,9 @@ interface RouteDrawerProps {
   onClose: () => void;
   onRouteChange: (result: RouteResult | null) => void;
   presentation?: 'drawer' | 'inline';
+  /** Origem e destino já escolhidos (ex.: link "Traçar rota" da página de horários). Com os dois, a rota é traçada ao abrir. */
+  initialFromId?: string;
+  initialToId?: string;
 }
 
 export interface RouteResult {
@@ -253,9 +256,9 @@ function RouteSteps({ result }: { result: PathResult }) {
 }
 
 // Componente principal 
-export default function RouteDrawer({ isOpen, onClose, onRouteChange, presentation = 'drawer' }: RouteDrawerProps) {
-  const [fromId, setFromId] = useState('');
-  const [toId,   setToId]   = useState('');
+export default function RouteDrawer({ isOpen, onClose, onRouteChange, presentation = 'drawer', initialFromId, initialToId }: RouteDrawerProps) {
+  const [fromId, setFromId] = useState(initialFromId ?? '');
+  const [toId,   setToId]   = useState(initialToId ?? '');
   const [accessible, setAccessible] = useState(false);
   const [result, setResult] = useState<PathResult | null>(null);
   const [error, setError]   = useState('');
@@ -318,6 +321,15 @@ export default function RouteDrawer({ isOpen, onClose, onRouteChange, presentati
       }
     }, 50);
   }, [fromId, toId, accessible, onRouteChange]);
+
+  // Veio com origem e destino (link de outra página): traça a rota uma única vez, logo depois de montar.
+  const autoRan = useRef(false);
+  useEffect(() => {
+    if (autoRan.current || !initialFromId || !initialToId) return;
+    autoRan.current = true;
+    const t = setTimeout(handleSearch, 0);
+    return () => clearTimeout(t);
+  }, [initialFromId, initialToId, handleSearch]);
 
   const handleClear = () => {
     setFromId('');
