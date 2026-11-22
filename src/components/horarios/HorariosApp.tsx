@@ -30,34 +30,25 @@ export default function HorariosApp() {
   const searchParams = useSearchParams();
   const searchStr = searchParams ? (searchParams.toString() ? `?${searchParams.toString()}` : '') : (typeof window !== 'undefined' ? window.location.search : '');
 
+  const [prevSearchStr, setPrevSearchStr] = useState(searchStr);
   const [state, setState] = useState<ViewState>(() => readInitial(searchStr));
   const [visited, setVisited] = useState<View[]>(() => [readInitial(searchStr).view]);
   const [now, setNow] = useState(() => new Date());
   const periods = useApi('periods', getPeriods);
 
-  // Sincroniza com parâmetros de busca da URL quando navega pelo Next.js
-  useEffect(() => {
-    if (!searchParams) return;
-    const s = searchParams.toString();
-    const query = s ? `?${s}` : '';
-    if (searchParams.has('aba') || searchParams.has('sala') || searchParams.has('turma') || searchParams.has('q')) {
+  // Sincroniza com parâmetros de busca da URL quando navega pelo Next.js (padrão de ajuste de estado no render)
+  if (searchStr !== prevSearchStr) {
+    setPrevSearchStr(searchStr);
+    if (searchParams && (searchParams.has('aba') || searchParams.has('sala') || searchParams.has('turma') || searchParams.has('q'))) {
       let saved: string | null = null;
       try { saved = window.localStorage.getItem(STORAGE_KEY); } catch { /* ignora */ }
-      const parsed = parseState(query, saved);
-      setState((prev) => {
-        if (
-          prev.view === parsed.view &&
-          prev.sala === parsed.sala &&
-          prev.turma === parsed.turma &&
-          prev.q === parsed.q
-        ) {
-          return prev;
-        }
-        return parsed;
-      });
-      setVisited((v) => (v.includes(parsed.view) ? v : [...v, parsed.view]));
+      const parsed = parseState(searchStr, saved);
+      setState(parsed);
+      if (!visited.includes(parsed.view)) {
+        setVisited((v) => (v.includes(parsed.view) ? v : [...v, parsed.view]));
+      }
     }
-  }, [searchParams]);
+  }
 
   // guarda a escolha no aparelho e na URL (para poder compartilhar o link)
   useEffect(() => {

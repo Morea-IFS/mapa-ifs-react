@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "jest --watch",
-    "mobile": "npm --prefix mapa-ifs-mobile start"
+    "test": "jest --watch"
   },
   "dependencies": {
     "framer-motion": "^12.38.0",
