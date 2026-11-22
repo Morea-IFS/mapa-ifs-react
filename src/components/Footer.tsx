@@ -1,6 +1,7 @@
 'use client';
 
 import {Compass, ExternalLink } from 'lucide-react';
+import AccessCounter from './AccessCounter';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -54,6 +55,7 @@ export default function Footer() {
           <p>
             © {currentYear} <strong className="text-texto-secundario">MERO</strong>
           </p>
+          <AccessCounter />
           <p className="flex items-center gap-1">
             Mais um <strong className="text-destaque font-medium">Projeto Morea</strong>
           </p>

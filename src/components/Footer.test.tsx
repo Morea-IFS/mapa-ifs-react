@@ -2,6 +2,12 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Footer from './Footer';
 
+// Mock do AccessCounter para não disparar fetch nos testes do Footer
+jest.mock('./AccessCounter', () => ({
+  __esModule: true,
+  default: () => null,
+}));
+
 describe('Componente Footer', () => {
   it('deve renderizar o título MERO e a descrição do projeto', () => {
     render(<Footer />);
