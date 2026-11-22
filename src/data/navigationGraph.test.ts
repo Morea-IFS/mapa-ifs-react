@@ -107,7 +107,7 @@ describe('Algoritmo A* - Busca de Rotas (findPath)', () => {
     if (result) {
       expect(result.path[0].id).toBe('T_A01');
       expect(result.path[result.path.length - 1].id).toBe('S_A06');
-      expect(result.floorChanges.length).toBeGreaterThan(0);
+      expect(result.floorChanges.length).toBe(1);
       const hasStair = result.floorChanges.some((fc) => fc.type === 'escada');
       expect(hasStair).toBe(true);
     }

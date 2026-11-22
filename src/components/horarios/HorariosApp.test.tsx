@@ -128,6 +128,15 @@ describe('página de horários', () => {
     expect(await screen.findByText(/Nada encontrado para "zzzz"/)).toBeInTheDocument();
   });
 
+  it('abre diretamente na aba Por sala quando a URL possui parâmetros da sala', async () => {
+    window.history.replaceState(null, '', '/horarios?aba=sala&sala=SALA+01-BL02-S');
+    render(<HorariosApp />);
+    const panel = await screen.findByRole('tabpanel', { name: 'Por sala' });
+    expect((await within(panel).findAllByText('SALA 01-BL02-S')).length).toBeGreaterThanOrEqual(1);
+    expect(await within(panel).findByText('Língua Espanhola')).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /Por sala/ })).toHaveAttribute('aria-selected', 'true');
+  });
+
   it('mostra erro com botão de tentar de novo quando a API está fora', async () => {
     (global.fetch as jest.Mock).mockImplementation(async () => { throw new TypeError('Failed to fetch'); });
     render(<HorariosApp />);
