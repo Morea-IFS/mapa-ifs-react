@@ -688,9 +688,12 @@ export function findPath(
       }
 
       const floorChanges: PathResult['floorChanges'] = [];
-      for (const node of path) {
-        if (node.type === 'escada' || node.type === 'rampa') {
-          floorChanges.push({ floor: node.floor, nodeId: node.id, type: node.type });
+      for (let i = 0; i < path.length - 1; i++) {
+        const curr = path[i];
+        const next = path[i + 1];
+        if (curr.floor !== next.floor) {
+          const type = (curr.type === 'rampa' || next.type === 'rampa') ? 'rampa' : 'escada';
+          floorChanges.push({ floor: next.floor, nodeId: next.id, type });
         }
       }
 
